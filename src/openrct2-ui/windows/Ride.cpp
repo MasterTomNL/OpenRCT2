@@ -107,8 +107,9 @@ enum {
     WIDX_TAB_8,
     WIDX_TAB_9,
     WIDX_TAB_10,
+    WIDX_SHARED_COUNT,
 
-    WIDX_VIEWPORT = 14,
+    WIDX_VIEWPORT = WIDX_SHARED_COUNT,
     WIDX_VIEW,
     WIDX_VIEW_DROPDOWN,
     WIDX_STATUS,
@@ -124,7 +125,7 @@ enum {
     WIDX_RIDE_TYPE,
     WIDX_RIDE_TYPE_DROPDOWN,
 
-    WIDX_VEHICLE_TYPE = 14,
+    WIDX_VEHICLE_TYPE = WIDX_SHARED_COUNT,
     WIDX_VEHICLE_TYPE_DROPDOWN,
     WIDX_VEHICLE_TRAINS_PREVIEW,
     WIDX_VEHICLE_TRAINS,
@@ -134,7 +135,7 @@ enum {
     WIDX_VEHICLE_CARS_PER_TRAIN_INCREASE,
     WIDX_VEHICLE_CARS_PER_TRAIN_DECREASE,
 
-    WIDX_MODE_TWEAK = 14,
+    WIDX_MODE_TWEAK = WIDX_SHARED_COUNT,
     WIDX_MODE_TWEAK_INCREASE,
     WIDX_MODE_TWEAK_DECREASE,
     WIDX_LIFT_HILL_SPEED,
@@ -162,13 +163,13 @@ enum {
     WIDX_OPERATE_NUMBER_OF_CIRCUITS_INCREASE,
     WIDX_OPERATE_NUMBER_OF_CIRCUITS_DECREASE,
 
-    WIDX_INSPECTION_INTERVAL = 14,
+    WIDX_INSPECTION_INTERVAL = WIDX_SHARED_COUNT,
     WIDX_INSPECTION_INTERVAL_DROPDOWN,
     WIDX_LOCATE_MECHANIC,
     WIDX_REFURBISH_RIDE,
     WIDX_FORCE_BREAKDOWN,
 
-    WIDX_TRACK_PREVIEW = 14,
+    WIDX_TRACK_PREVIEW = WIDX_SHARED_COUNT,
     WIDX_TRACK_COLOUR_SCHEME,
     WIDX_TRACK_COLOUR_SCHEME_DROPDOWN,
     WIDX_TRACK_MAIN_COLOUR,
@@ -190,23 +191,23 @@ enum {
     WIDX_VEHICLE_TERNARY_COLOUR,
     WIDX_SELL_ITEM_RANDOM_COLOUR_CHECKBOX,
 
-    WIDX_PLAY_MUSIC = 14,
+    WIDX_PLAY_MUSIC = WIDX_SHARED_COUNT,
     WIDX_MUSIC,
     WIDX_MUSIC_DROPDOWN,
 
-    WIDX_SAVE_TRACK_DESIGN = 14,
+    WIDX_SAVE_TRACK_DESIGN = WIDX_SHARED_COUNT,
     WIDX_SELECT_NEARBY_SCENERY,
     WIDX_RESET_SELECTION,
     WIDX_SAVE_DESIGN,
     WIDX_CANCEL_DESIGN,
 
-    WIDX_GRAPH = 14,
+    WIDX_GRAPH = WIDX_SHARED_COUNT,
     WIDX_GRAPH_VELOCITY,
     WIDX_GRAPH_ALTITUDE,
     WIDX_GRAPH_VERTICAL,
     WIDX_GRAPH_LATERAL,
 
-    WIDX_PRIMARY_PRICE_LABEL = 14,
+    WIDX_PRIMARY_PRICE_LABEL = WIDX_SHARED_COUNT,
     WIDX_PRIMARY_PRICE,
     WIDX_PRIMARY_PRICE_INCREASE,
     WIDX_PRIMARY_PRICE_DECREASE,
@@ -217,7 +218,7 @@ enum {
     WIDX_SECONDARY_PRICE_DECREASE,
     WIDX_SECONDARY_PRICE_SAME_THROUGHOUT_PARK,
 
-    WIDX_SHOW_GUESTS_THOUGHTS = 14,
+    WIDX_SHOW_GUESTS_THOUGHTS = WIDX_SHARED_COUNT,
     WIDX_SHOW_GUESTS_ON_RIDE,
     WIDX_SHOW_GUESTS_QUEUING
 };
@@ -308,8 +309,8 @@ static Widget window_ride_maintenance_widgets[] = {
 static Widget window_ride_colour_widgets[] = {
     MAIN_RIDE_WIDGETS,
     MakeWidget({  3,  47}, { 68, 47}, WindowWidgetType::Spinner,   WindowColour::Secondary                                                                    ),
-    MakeWidget({ 74,  49}, {239, 12}, WindowWidgetType::DropdownMenu,  WindowColour::Secondary, STR_ARG_14_STRINGID                                               ),
-    MakeWidget({301,  50}, { 11, 10}, WindowWidgetType::Button,    WindowColour::Secondary, STR_DROPDOWN_GLYPH,  STR_COLOUR_SCHEME_TO_CHANGE_TIP              ),
+    MakeWidget({ 74,  62}, {239, 12}, WindowWidgetType::DropdownMenu,  WindowColour::Secondary, STR_ARG_14_STRINGID                                               ),
+    MakeWidget({301,  63}, { 11, 10}, WindowWidgetType::Button,    WindowColour::Secondary, STR_DROPDOWN_GLYPH,  STR_COLOUR_SCHEME_TO_CHANGE_TIP              ),
     MakeWidget({ 79,  74}, { 12, 12}, WindowWidgetType::ColourBtn, WindowColour::Secondary, 0xFFFFFFFF,          STR_SELECT_MAIN_COLOUR_TIP                   ),
     MakeWidget({ 99,  74}, { 12, 12}, WindowWidgetType::ColourBtn, WindowColour::Secondary, 0xFFFFFFFF,          STR_SELECT_ADDITIONAL_COLOUR_1_TIP           ),
     MakeWidget({119,  74}, { 12, 12}, WindowWidgetType::ColourBtn, WindowColour::Secondary, 0xFFFFFFFF,          STR_SELECT_SUPPORT_STRUCTURE_COLOUR_TIP      ),
@@ -4396,17 +4397,37 @@ static void WindowRideColourMousedown(WindowBase* w, WidgetIndex widgetIndex, Wi
             WindowDropdownShowColour(w, widget, w->colours[1], ride->track_colour[colourSchemeIndex].supports);
             break;
         case WIDX_MAZE_STYLE_DROPDOWN:
-            for (i = 0; i < 4; i++)
+            if (ride->type == RIDE_TYPE_MAZE)
             {
-                gDropdownItems[i].Format = STR_DROPDOWN_MENU_LABEL;
-                gDropdownItems[i].Args = MazeOptions[i].text;
+                numItems = static_cast<int32_t>(std::size(MazeOptions));
+                for (i = 0; i < numItems; i++)
+                {
+                    gDropdownItems[i].Format = STR_DROPDOWN_MENU_LABEL;
+                    gDropdownItems[i].Args = MazeOptions[i].text;
+                }
             }
-
+            else
+            {
+                numItems = 2;
+                gDropdownItems[0].Format = STR_DROPDOWN_MENU_LABEL;
+                gDropdownItems[1].Format = STR_DROPDOWN_MENU_LABEL;
+                gDropdownItems[0].Args = STR_DEFAULT_TRACK_STYLE;
+                gDropdownItems[1].Args = STR_ALTERNATIVE_TRACK_STYLE;
+            }
+            
             WindowDropdownShowTextCustomWidth(
                 { w->windowPos.x + dropdownWidget->left, w->windowPos.y + dropdownWidget->top }, dropdownWidget->height() + 1,
-                w->colours[1], 0, Dropdown::Flag::StayOpen, 4, widget->right - dropdownWidget->left);
-
-            Dropdown::SetChecked(ride->track_colour[colourSchemeIndex].supports, true);
+                w->colours[1], 0, Dropdown::Flag::StayOpen, numItems, widget->right - dropdownWidget->left);
+            
+            if (ride->type == RIDE_TYPE_MAZE)
+            {
+                Dropdown::SetChecked(ride->track_colour[colourSchemeIndex].supports, true);    
+            }
+            else
+            {
+                Dropdown::SetChecked(ride->TrackStyle, true);
+            }
+            
             break;
         case WIDX_ENTRANCE_STYLE_DROPDOWN:
         {
@@ -4523,9 +4544,19 @@ static void WindowRideColourDropdown(WindowBase* w, WidgetIndex widgetIndex, int
         break;
         case WIDX_MAZE_STYLE_DROPDOWN:
         {
-            auto rideSetAppearanceAction = RideSetAppearanceAction(
-                rideId, RideSetAppearanceType::MazeStyle, dropdownIndex, w->ride_colour);
-            GameActions::Execute(&rideSetAppearanceAction);
+            const auto* ride = GetRide(w->rideId);
+            if (ride->type == RIDE_TYPE_MAZE)
+            {
+                auto rideSetAppearanceAction = RideSetAppearanceAction(
+                    rideId, RideSetAppearanceType::MazeStyle, dropdownIndex, w->ride_colour);
+                GameActions::Execute(&rideSetAppearanceAction);
+            }
+            else
+            {
+                auto rideSetAppearanceAction = RideSetAppearanceAction(
+                    rideId, RideSetAppearanceType::TrackStyle, dropdownIndex, w->var_48C);
+                GameActions::Execute(&rideSetAppearanceAction);
+            }
         }
         break;
         case WIDX_ENTRANCE_STYLE_DROPDOWN:
@@ -4659,11 +4690,15 @@ static void WindowRideColourInvalidate(WindowBase* w)
 
     // Maze style
     const auto& rtd = ride->GetRideTypeDescriptor();
-    if (rtd.HasFlag(RIDE_TYPE_FLAG_IS_MAZE))
+    if (rtd.HasFlag(RIDE_TYPE_FLAG_IS_MAZE) || ride_type_has_subvarieties(ride->type))
     {
         window_ride_colour_widgets[WIDX_MAZE_STYLE].type = WindowWidgetType::DropdownMenu;
         window_ride_colour_widgets[WIDX_MAZE_STYLE_DROPDOWN].type = WindowWidgetType::Button;
-        window_ride_colour_widgets[WIDX_MAZE_STYLE].text = MazeOptions[trackColour.supports].text;
+        if (rtd.HasFlag(RIDE_TYPE_FLAG_IS_MAZE))
+            window_ride_colour_widgets[WIDX_MAZE_STYLE].text = MazeOptions[trackColour.supports].text;
+        else
+            window_ride_colour_widgets[WIDX_MAZE_STYLE].text = 
+                ride->TrackStyle == 0 ? STR_DEFAULT_TRACK_STYLE : STR_ALTERNATIVE_TRACK_STYLE;
     }
     else
     {

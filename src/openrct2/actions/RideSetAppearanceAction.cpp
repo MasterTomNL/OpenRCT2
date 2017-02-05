@@ -80,6 +80,7 @@ GameActions::Result RideSetAppearanceAction::Query() const
         case RideSetAppearanceType::VehicleColourScheme:
         case RideSetAppearanceType::EntranceStyle:
         case RideSetAppearanceType::SellingItemColourIsRandom:
+        case RideSetAppearanceType::TrackStyle: // Perhaps check for in bounds?
             break;
         default:
             LOG_WARNING("Invalid game command, type %d not recognised", _type);
@@ -140,6 +141,9 @@ GameActions::Result RideSetAppearanceAction::Execute() const
             break;
         case RideSetAppearanceType::SellingItemColourIsRandom:
             ride->SetLifecycleFlag(RIDE_LIFECYCLE_RANDOM_SHOP_COLOURS, static_cast<bool>(_value));
+            break;
+        case RideSetAppearanceType::TrackStyle:
+            ride->TrackStyle = _value;
             break;
     }
     WindowInvalidateByNumber(WindowClass::Ride, _rideIndex.ToUnderlying());

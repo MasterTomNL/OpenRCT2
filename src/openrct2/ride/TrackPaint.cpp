@@ -2248,6 +2248,10 @@ void PaintTrack(PaintSession& session, Direction direction, int32_t height, cons
 
         const auto& rtd = GetRideTypeDescriptor(trackElement.GetRideType());
         TRACK_PAINT_FUNCTION_GETTER paintFunctionGetter = rtd.TrackPaintFunction;
+        if (ride->type == RIDE_TYPE_BOBSLEIGH_COASTER && ride->TrackStyle == 1)
+        {
+            paintFunctionGetter = GetTrackPaintFunctionFlyingTurns;
+        }
         if (paintFunctionGetter != nullptr)
         {
             TRACK_PAINT_FUNCTION paintFunction = paintFunctionGetter(trackType);

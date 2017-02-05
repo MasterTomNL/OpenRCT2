@@ -5853,3 +5853,8 @@ ResultWithMessage Ride::ChangeStatusCreateVehicles(bool isApplying, const Coords
 
     return { true };
 }
+
+bool ride_type_has_subvarieties(uint8_t rideType)
+{
+    return (rideType == RIDE_TYPE_WOODEN_ROLLER_COASTER || rideType == RIDE_TYPE_BOBSLEIGH_COASTER);
+}

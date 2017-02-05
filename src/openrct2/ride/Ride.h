@@ -117,6 +117,7 @@ struct Ride
     // pointer to static info. for example, wild mouse type is 0x36, subtype is
     // 0x4c.
     ObjectEntryIndex subtype;
+    uint8_t TrackStyle;
     RideMode mode;
     uint8_t colour_scheme_type;
     VehicleColour vehicle_colours[OpenRCT2::Limits::MaxTrainsPerRide + 1];
@@ -1103,3 +1104,6 @@ std::vector<RideId> GetTracklessRides();
 
 void CircusMusicUpdate(Ride& ride);
 void DefaultMusicUpdate(Ride& ride);
+
+bool ride_type_has_subvarieties(uint8_t rideType);
+

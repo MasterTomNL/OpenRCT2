@@ -3945,6 +3945,9 @@ enum : uint16_t
     STR_RCT1_INTEREST_TIP = 6546,
     STR_ALL_SCENERY = 6547,
 
+    STR_DEFAULT_TRACK_STYLE = 6548,
+    STR_ALTERNATIVE_TRACK_STYLE = 6549,
+    
     // Have to include resource strings (from scenarios and objects) for the time being now that language is partially working
     /* MAX_STR_COUNT = 32768 */ // MAX_STR_COUNT - upper limit for number of strings, not the current count strings
 };
