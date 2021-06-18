@@ -29,14 +29,14 @@
 
 static constexpr const StringId WINDOW_TITLE = STR_SELECT_SCENARIO;
 static constexpr const int32_t WW = 734;
-static constexpr const int32_t WH = 384;
+static constexpr const int32_t WH = 400;
 static constexpr const int32_t SidebarWidth = 180;
 static constexpr const int32_t TabWidth = 92;
 static constexpr const int32_t TabHeight = 34;
 static constexpr const int32_t WidgetsStart = 17;
 static constexpr const int32_t TabsStart = WidgetsStart;
 #define INITIAL_NUM_UNLOCKED_SCENARIOS 5
-constexpr const uint8_t NumTabs = 10;
+constexpr const uint8_t NumTabs = 11;
 
 // clang-format off
 enum class ListItemType : uint8_t
@@ -79,6 +79,7 @@ enum {
     WIDX_TAB8,
     WIDX_TAB9,
     WIDX_TAB10,
+    WIDX_TAB11,
     WIDX_SCENARIOLIST
 };
 
@@ -94,7 +95,8 @@ static Widget window_scenarioselect_widgets[] = {
     MakeRemapWidget({  3, TabsStart + (TabHeight * 6) }, { TabWidth,  TabHeight}, WindowWidgetType::Tab,    WindowColour::Secondary, SPR_G2_SIDEWAYS_TAB),   // tab 07
     MakeRemapWidget({  3, TabsStart + (TabHeight * 7) }, { TabWidth,  TabHeight}, WindowWidgetType::Tab,    WindowColour::Secondary, SPR_G2_SIDEWAYS_TAB),   // tab 08
     MakeRemapWidget({  3, TabsStart + (TabHeight * 8) }, { TabWidth,  TabHeight}, WindowWidgetType::Tab,    WindowColour::Secondary, SPR_G2_SIDEWAYS_TAB),   // tab 09
-    MakeRemapWidget({  3, TabsStart + (TabHeight * 8) }, { TabWidth,  TabHeight}, WindowWidgetType::Tab,    WindowColour::Secondary, SPR_G2_SIDEWAYS_TAB),   // tab 10
+    MakeRemapWidget({  3, TabsStart + (TabHeight * 9) }, { TabWidth,  TabHeight}, WindowWidgetType::Tab,    WindowColour::Secondary, SPR_G2_SIDEWAYS_TAB),   // tab 10
+    MakeRemapWidget({  3, TabsStart + (TabHeight *10) }, { TabWidth,  TabHeight}, WindowWidgetType::Tab,    WindowColour::Secondary, SPR_G2_SIDEWAYS_TAB),   // tab 10
     MakeWidget     ({  TabWidth + 3, WidgetsStart + 1 }, { WW - SidebarWidth, 276 }, WindowWidgetType::Scroll, WindowColour::Secondary, SCROLL_VERTICAL),    // level list
     WIDGETS_END,
 };
@@ -107,6 +109,7 @@ static constexpr const StringId ScenarioOriginStringIds[] = {
     STR_SCENARIO_CATEGORY_RCT2_WW,
     STR_SCENARIO_CATEGORY_RCT2_TT,
     STR_SCENARIO_CATEGORY_UCES,
+    STR_SCENARIO_CATEGORY_MAIAN,
     STR_SCENARIO_CATEGORY_REAL_PARKS,
     STR_SCENARIO_CATEGORY_EXTRAS_PARKS,
     STR_SCENARIO_CATEGORY_OTHER_PARKS,
@@ -270,7 +273,7 @@ static void WindowScenarioselectMouseup(WindowBase* w, WidgetIndex widgetIndex)
 
 static void WindowScenarioselectMousedown(WindowBase* w, WidgetIndex widgetIndex, Widget* widget)
 {
-    if (widgetIndex >= WIDX_TAB1 && widgetIndex <= WIDX_TAB10)
+    if (widgetIndex >= WIDX_TAB1 && widgetIndex <= WIDX_TAB11)
     {
         w->selected_tab = widgetIndex - 4;
         w->highlighted_scenario = nullptr;
@@ -412,7 +415,7 @@ static void WindowScenarioselectInvalidate(WindowBase* w)
     w->pressed_widgets &= ~(
         (1uLL << WIDX_CLOSE) | (1uLL << WIDX_TAB1) | (1uLL << WIDX_TAB2) | (1uLL << WIDX_TAB3) | (1uLL << WIDX_TAB4)
         | (1uLL << WIDX_TAB5) | (1uLL << WIDX_TAB6) | (1uLL << WIDX_TAB7) | (1uLL << WIDX_TAB8) | (1uLL << WIDX_TAB9)
-        | (1uLL << WIDX_TAB10));
+        | (1uLL << WIDX_TAB10) | (1uLL << WIDX_TAB11));
 
     w->pressed_widgets |= 1LL << (w->selected_tab + WIDX_TAB1);
 
