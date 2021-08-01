@@ -433,9 +433,28 @@ GameActions::Result TrackRemoveAction::Execute() const
             }
         }
 
-        if (ride->GetRideTypeDescriptor().HasFlag(RIDE_TYPE_FLAG_TRACK_MUST_BE_ON_WATER))
+        // Recalcute if the tile is occupied by a track that needs to be on the water.
+        surfaceElement->SetHasTrackThatNeedsWater(false);
+        auto* trackElement = MapGetFirstElementAt(mapLoc);
+        if (trackElement != nullptr)
         {
-            surfaceElement->SetHasTrackThatNeedsWater(false);
+            do
+            {
+                if (trackElement->GetType() != TileElementType::Track)
+                    continue;
+
+                auto* tileElementRide = GetRide(trackElement->AsTrack()->GetRideIndex());
+                // Ignore the ride we are currently removing
+                if (tileElementRide == nullptr || tileElementRide == ride)
+                    continue;
+
+                if (tileElementRide->GetRideTypeDescriptor().HasFlag(RIDE_TYPE_FLAG_TRACK_MUST_BE_ON_WATER))
+                {
+                    surfaceElement->SetHasTrackThatNeedsWater(true);
+                    break;
+                }
+
+            } while (!(trackElement++)->IsLastForTile());
         }
 
         InvalidateTestResults(*ride);
