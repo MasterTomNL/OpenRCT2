@@ -7,6 +7,7 @@
  * OpenRCT2 is licensed under the GNU General Public License version 3.
  *****************************************************************************/
 
+#include "../../core/Numerics.hpp"
 #include "../../interface/Viewport.h"
 #include "../../object/StationObject.h"
 #include "../../paint/Paint.h"
@@ -43,7 +44,7 @@ static void PaintDodgemsRoof(PaintSession& session, int32_t height, int32_t offs
     PaintAttachToPreviousPS(session, imageId, 0, 0);
 }
 
-static void PaintDodgems(
+static void PaintDodgems_4x4(
     PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
     const TrackElement& trackElement)
 {
@@ -100,15 +101,75 @@ static void PaintDodgems(
     PaintUtilSetGeneralSupportHeight(session, height + 48, 0x20);
 }
 
+static void paint_dodgems_2x4(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement)
+{
+    auto edges = edges_2x4[direction][trackSequence];
+
+    WoodenASupportsPaintSetup(session, direction & 1, 0, height, session.TrackColours[SCHEME_MISC]);
+
+    const StationObject* stationObject = ride.GetStationObject();
+
+    if (stationObject != nullptr && !(stationObject->Flags & STATION_OBJECT_FLAGS::NO_PLATFORMS))
+    {
+        auto imageId = session.TrackColours[SCHEME_SUPPORTS].WithIndex(SprDodgemsFloor);
+        PaintAddImageAsParent(session, imageId, { 0, 0, height }, { { 1, 1, height }, { 30, 30, 1 } });
+
+        TrackPaintUtilPaintFences(
+            session, edges, session.MapPosition, trackElement, ride, session.TrackColours[SCHEME_SUPPORTS], height,
+            DodgemsFenceSprites, session.CurrentRotation);
+
+        switch (direction)
+        {
+            case 2:
+                trackSequence = 7 - trackSequence;
+                [[fallthrough]];
+            case 0:
+                if ((trackSequence / 4) & 1)
+                {
+                    PaintDodgemsRoof(session, height + 30, 0);
+                }
+                else
+                {
+                    PaintDodgemsRoof(session, height + 30, 2);
+                }
+                break;
+
+            case 3:
+                trackSequence = 7 - trackSequence;
+                [[fallthrough]];
+            case 1:
+                if ((trackSequence / 4) & 1)
+                {
+                    PaintDodgemsRoof(session, height + 30, 1);
+                }
+                else
+                {
+                    PaintDodgemsRoof(session, height + 30, 3);
+                }
+                break;
+        }
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, SEGMENTS_ALL, height + 36, 0x20);
+    PaintUtilSetGeneralSupportHeight(session, height + 48, 0x20);
+}
+
 /**
  * rct2:
  */
 TRACK_PAINT_FUNCTION GetTrackPaintFunctionDodgems(int32_t trackType)
 {
-    if (trackType != TrackElemType::FlatTrack4x4)
+    if (trackType == TrackElemType::FlatTrack4x4)
     {
-        return nullptr;
+        return PaintDodgems_4x4;
     }
 
-    return PaintDodgems;
+    if (trackType == TrackElemType::FlatTrack2x4)
+    {
+        return PaintDodgems_2x4;
+    }
+
+    return nullptr;
 }

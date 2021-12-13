@@ -61,14 +61,19 @@ struct DodgemsTrackSize
     uint8_t bottom;
 };
 
-constexpr const DodgemsTrackSize GetDodgemsTrackSize(track_type_t type)
+constexpr const DodgemsTrackSize GetDodgemsTrackSize(track_type_t type, Direction direction)
 {
     if (type == TrackElemType::FlatTrack2x2)
         return { 4, 4, 59, 59 };
     if (type == TrackElemType::FlatTrack4x4)
         return { 4, 4, 123, 123 };
     if (type == TrackElemType::FlatTrack2x4)
-        return { 4, 4, 59, 123 };
+    {
+        if (direction & 1)
+            return { 4, 4, 59, 123 };
+        else
+            return { 4, 4, 123, 59 };
+    }
     return { 0, 0, 0, 0 };
 }
 

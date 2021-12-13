@@ -5863,22 +5863,22 @@ int32_t Vehicle::UpdateMotionDodgems()
  *  rct2: 0x006DD365
  */
 static bool wouldCollideWithDodgemsTrackEdge(
-    const CoordsXY& coords, const CoordsXY& trackLocation, uint32_t trackType, uint16_t dodgemsCarRadius)
+    const CoordsXY& coords, const CoordsXY& trackLocation, uint32_t trackType, Direction direction, uint16_t dodgemsCarRadius)
 {
-    int16_t rideLeft = trackLocation.x + GetDodgemsTrackSize(trackType).left;
-    int16_t rideRight = trackLocation.x + GetDodgemsTrackSize(trackType).right;
-    int16_t rideTop = trackLocation.y + GetDodgemsTrackSize(trackType).top;
-    int16_t rideBottom = trackLocation.y + GetDodgemsTrackSize(trackType).bottom;
+    int16_t rideLeft = trackLocation.x + GetDodgemsTrackSize(trackType, direction).left;
+    int16_t rideRight = trackLocation.x + GetDodgemsTrackSize(trackType, direction).right;
+    int16_t rideTop = trackLocation.y + GetDodgemsTrackSize(trackType, direction).top;
+    int16_t rideBottom = trackLocation.y + GetDodgemsTrackSize(trackType, direction).bottom;
 
     return coords.x - dodgemsCarRadius < rideLeft || coords.y - dodgemsCarRadius < rideTop
         || coords.x + dodgemsCarRadius > rideRight || coords.y + dodgemsCarRadius > rideBottom;
 }
 
-std::optional<EntityId> Vehicle::DodgemsCarWouldCollideAt(const CoordsXY& coords) const
+std::optional<EntityId> Vehicle::DodgemsCarWouldCollideAt(const CoordsXY& coords, Direction direction) const
 {
     auto trackType = GetTrackType();
 
-    if (wouldCollideWithDodgemsTrackEdge(coords, TrackLocation, trackType, (var_44 * 30) >> 9))
+    if (wouldCollideWithDodgemsTrackEdge(coords, TrackLocation, trackType, direction, (var_44 * 30) >> 9))
     {
         return EntityId::GetNull();
     }

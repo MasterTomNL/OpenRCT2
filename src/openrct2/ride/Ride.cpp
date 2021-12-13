@@ -3219,7 +3219,7 @@ static Vehicle* VehicleCreateCar(
             vehicle->sprite_direction = ScenarioRand() & 0x1E;
             chosenLoc.y = dodgemPos.y + (ScenarioRand() & 0xFF);
             chosenLoc.x = dodgemPos.x + (ScenarioRand() & 0xFF);
-        } while (vehicle->DodgemsCarWouldCollideAt(chosenLoc).has_value());
+        } while (vehicle->DodgemsCarWouldCollideAt(chosenLoc, trackElement->GetDirection()).has_value());
 
         vehicle->MoveTo({ chosenLoc, dodgemPos.z });
     }
