@@ -69,9 +69,13 @@ constexpr const DodgemsTrackSize GetDodgemsTrackSize(track_type_t type, Directio
         return { 4, 4, 123, 123 };
     if (type == TrackElemType::FlatTrack2x4)
     {
-        if (direction & 1)
+        if (direction == 0)
             return { 4, 4, 59, 123 };
-        else
+        if (direction == 1)
+            return { 4, 68, 123, 123 };
+        if (direction == 2)
+            return { 68, 4, 123, 123 };
+        if (direction == 3)
             return { 4, 4, 123, 59 };
     }
     return { 0, 0, 0, 0 };

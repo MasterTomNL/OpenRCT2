@@ -5696,6 +5696,8 @@ int32_t Vehicle::UpdateMotionDodgems()
     if (curRide == nullptr)
         return _vehicleMotionTrackFlags;
 
+    const auto* originElement = curRide->GetOriginElement(StationIndex::FromUnderlying(0));
+    const Direction originDirection = (originElement != nullptr) ? originElement->GetDirection() : 0;
     int32_t nextVelocity = velocity + acceleration;
     if (curRide->lifecycle_flags & (RIDE_LIFECYCLE_BREAKDOWN_PENDING | RIDE_LIFECYCLE_BROKEN_DOWN)
         && curRide->breakdown_reason_pending == BREAKDOWN_SAFETY_CUT_OUT)
@@ -5751,7 +5753,7 @@ int32_t Vehicle::UpdateMotionDodgems()
         location.x += Unk9A36C4[oldCollisionDirection + 1].x;
         location.y += Unk9A36C4[oldCollisionDirection + 1].y;
 
-        if (collideSprite = DodgemsCarWouldCollideAt(location); !collideSprite.has_value())
+        if (collideSprite = DodgemsCarWouldCollideAt(location, originDirection); !collideSprite.has_value())
         {
             MoveTo(location);
         }
@@ -5776,7 +5778,7 @@ int32_t Vehicle::UpdateMotionDodgems()
             location.x += Unk9A36C4[direction].x;
             location.y += Unk9A36C4[direction].y;
 
-            if (collideSprite = DodgemsCarWouldCollideAt(location); collideSprite.has_value())
+            if (collideSprite = DodgemsCarWouldCollideAt(location, originDirection); collideSprite.has_value())
             {
                 break;
             }
