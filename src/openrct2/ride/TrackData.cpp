@@ -5922,8 +5922,8 @@ static constexpr TrackDefinition TrackDefinitions[TrackElemType::Count] =
     { TRACK_ROTATION_CONTROL_TOGGLE,TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // ELEM_ROTATION_CONTROL_TOGGLE
     { TRACK_FLAT,                   TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack1x4A
     { TRACK_FLAT,                   TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack2x2
-    { TRACK_FLAT,                   TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack4x4
-    { TRACK_FLAT,                   TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack2x4
+    { TRACK_FLAT_BASE_4_X_4,        TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack4x4
+    { TRACK_FLAT_BASE_2_X_4,        TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack2x4
     { TRACK_FLAT,                   TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack1x5
     { TRACK_FLAT,                   TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack1x1A
     { TRACK_FLAT,                   TRACK_SLOPE_NONE,           TRACK_SLOPE_NONE,           TRACK_BANK_NONE,        TRACK_BANK_NONE,        0                  },  // TrackElemType::FlatTrack1x4B
@@ -7105,16 +7105,16 @@ static constexpr const StringId RideConfigurationStringIds[] = {
     STR_QUARTER_LOOP,                  // 254
     STR_QUARTER_LOOP,                  // 255
     STR_SPINNING_CONTROL_TOGGLE_TRACK, // 256
-    STR_EMPTY,                         // 257
-    STR_EMPTY,                         // 258
-    STR_EMPTY,                         // 259
-    STR_EMPTY,                         // 260
-    STR_EMPTY,                         // 261
-    STR_EMPTY,                         // 262
-    STR_EMPTY,                         // 263
-    STR_EMPTY,                         // 264
-    STR_EMPTY,                         // 265
-    STR_EMPTY,                         // 266
+    STR_EMPTY,                         // TrackElemType::FlatTrack1x4A
+    STR_EMPTY,                         // TrackElemType::FlatTrack2x2
+    STR_FLAT_RIDE_BASE_4_X_4,          // TrackElemType::FlatTrack4x4
+    STR_FLAT_RIDE_BASE_2_X_4,          // TrackElemType::FlatTrack2x4
+    STR_EMPTY,                         // TrackElemType::FlatTrack1x5
+    STR_EMPTY,                         // TrackElemType::FlatTrack1x1A
+    STR_EMPTY,                         // TrackElemType::FlatTrack1x4B
+    STR_EMPTY,                         // TrackElemType::FlatTrack1x1B
+    STR_EMPTY,                         // TrackElemType::FlatTrack1x4C
+    STR_EMPTY,                         // TrackElemType::FlatTrack3x3
     STR_LARGE_HALF_CORKSCREW_LEFT,     // TrackElemType::LeftCorkscrewUp
     STR_LARGE_HALF_CORKSCREW_RIGHT,    // TrackElemType::RightCorkscrewUp
     STR_LARGE_HALF_CORKSCREW_LEFT,     // TrackElemType::LeftCorkscrewDown
