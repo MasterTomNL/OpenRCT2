@@ -20,7 +20,7 @@ void FootpathSurfaceObject::Load()
     GetStringTable().Sort();
     NameStringId = LanguageAllocateObjectString(GetName());
 
-    auto numImages = GetImageTable().GetCount();
+    auto numImages = GetNumImages();
     if (numImages != 0)
     {
         PreviewImageId = LoadImages();
@@ -39,8 +39,8 @@ void FootpathSurfaceObject::Unload()
     UnloadImages();
 
     NameStringId = 0;
-    PreviewImageId = 0;
-    BaseImageId = 0;
+    PreviewImageId = ImageIndexUndefined;
+    BaseImageId = ImageIndexUndefined;
 }
 
 void FootpathSurfaceObject::DrawPreview(DrawPixelInfo& dpi, int32_t width, int32_t height) const

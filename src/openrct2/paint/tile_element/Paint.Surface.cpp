@@ -384,7 +384,7 @@ static ImageId GetTunnelImage(const TerrainEdgeObject* edgeObject, uint8_t type,
     bool hasDoors = false;
     if (edgeObject != nullptr)
     {
-        hasDoors = edgeObject->HasDoors && !edgeObject->UsesFallbackImages();
+        hasDoors = edgeObject->HasDoors /* && !edgeObject->UsesFallbackImages()*/;
     }
 
     if (!hasDoors && type >= REGULAR_TUNNEL_TYPE_COUNT && type < std::size(offsets))

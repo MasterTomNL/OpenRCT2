@@ -799,19 +799,19 @@ namespace OpenRCT2
     private:
         bool HasObjectsThatUseFallbackImages()
         {
-            for (auto objectType : getAllObjectTypes())
-            {
-                auto maxObjectsOfType = static_cast<ObjectEntryIndex>(getObjectEntryGroupCount(objectType));
-                for (ObjectEntryIndex i = 0; i < maxObjectsOfType; i++)
-                {
-                    auto obj = _objectManager->GetLoadedObject(objectType, i);
-                    if (obj != nullptr)
-                    {
-                        if (obj->UsesFallbackImages())
-                            return true;
-                    }
-                }
-            }
+            //            for (auto objectType : getAllObjectTypes())
+            //            {
+            //                auto maxObjectsOfType = static_cast<ObjectEntryIndex>(getObjectEntryGroupCount(objectType));
+            //                for (ObjectEntryIndex i = 0; i < maxObjectsOfType; i++)
+            //                {
+            //                    auto obj = _objectManager->GetLoadedObject(objectType, i);
+            //                    if (obj != nullptr)
+            //                    {
+            //                        if (obj->UsesFallbackImages())
+            //                            return true;
+            //                    }
+            //                }
+            //            }
             return false;
         }
 
@@ -844,6 +844,8 @@ namespace OpenRCT2
 
         bool LoadBaseGraphics()
         {
+            LoadImageObjects();
+
             if (!GfxLoadG1(*_env))
             {
                 return false;

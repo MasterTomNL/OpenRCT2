@@ -9,6 +9,7 @@
 
 #include "Object.h"
 
+#include "../AssetPackManager.h"
 #include "../Context.h"
 #include "../core/File.h"
 #include "../core/FileStream.h"
@@ -20,6 +21,7 @@
 #include "../localisation/LocalisationService.h"
 #include "../localisation/StringIds.h"
 #include "../world/Scenery.h"
+#include "ImageTable2.h"
 #include "ObjectLimits.h"
 #include "ObjectRepository.h"
 
@@ -140,6 +142,16 @@ bool ObjectEntryDescriptor::operator!=(const ObjectEntryDescriptor& rhs) const
     return !(*this == rhs);
 }
 
+Object::Object()
+{
+    _imageTable = std::make_unique<ImageTable2>();
+    _loadedImageTable = std::make_unique<ImageTable2>();
+}
+
+Object::~Object()
+{
+}
+
 void* Object::GetLegacyData()
 {
     throw std::runtime_error("Not supported.");
@@ -150,10 +162,36 @@ void Object::ReadLegacy(IReadObjectContext* context, OpenRCT2::IStream* stream)
     throw std::runtime_error("Not supported.");
 }
 
+ImageTable2* Object::GetImageTable()
+{
+    return _loadedImageTable.get();
+}
+
+const ImageTable2* Object::GetImageTable() const
+{
+    return _loadedImageTable.get();
+}
+
+uint32_t Object::GetNumImages() const
+{
+    if (_loadedImageTable == nullptr)
+        return 0;
+    return static_cast<uint32_t>(_loadedImageTable->GetCount());
+}
+
+void Object::ReadEmbeddedImages(IReadObjectContext& context, IStream& stream)
+{
+    _embeddedImages = GxFile(stream);
+}
+
 void Object::PopulateTablesFromJson(IReadObjectContext* context, json_t& root)
 {
     _stringTable.ReadJson(root);
-    _usesFallbackImages = _imageTable.ReadJson(context, root);
+    _imageTable->ReadFromJson(*context, root);
+
+    // HACK this should not be necessary, but required for StationObject and TerrainSurfaceObject which
+    //      call GetNumImages()
+    _loadedImageTable->LoadFrom(*_imageTable, 0, _imageTable->GetCount());
 }
 
 std::string Object::GetString(ObjectStringID index) const
@@ -188,6 +226,26 @@ std::vector<ObjectSourceGame> Object::GetSourceGames()
 void Object::SetSourceGames(const std::vector<ObjectSourceGame>& sourceGames)
 {
     _sourceGames = sourceGames;
+}
+
+ImageIndex Object::LoadImages()
+{
+    // Start with base images
+    _loadedImageTable->LoadFrom(*_imageTable, 0, _imageTable->GetCount());
+
+    // Override with asset packs
+    auto context = GetContext();
+    auto assetManager = context->GetAssetPackManager();
+    if (assetManager != nullptr)
+    {
+        assetManager->LoadImagesForObject(GetIdentifier(), *_loadedImageTable);
+    }
+    return _loadedImageTable->Load();
+}
+
+void Object::UnloadImages()
+{
+    _loadedImageTable->Unload();
 }
 
 #ifdef __WARN_SUGGEST_FINAL_METHODS__
@@ -420,6 +478,28 @@ ObjectVersion VersionTuple(std::string_view version)
     }
 
     return std::make_tuple(versions[0], versions[1], versions[2]);
+}
+
+const std::string& ObjectAsset::GetZipPath() const
+{
+    return _zipPath;
+}
+
+const std::string& ObjectAsset::GetPath() const
+{
+    return _path;
+}
+
+size_t ObjectAsset::GetHash() const
+{
+    auto h1 = std::hash<std::string>{}(_zipPath);
+    auto h2 = std::hash<std::string>{}(_path);
+    return h1 ^ (h2 << 1);
+}
+
+bool operator==(const ObjectAsset& l, const ObjectAsset& r)
+{
+    return l._zipPath == r._zipPath && l._path == r._path;
 }
 
 #ifdef __WARN_SUGGEST_FINAL_METHODS__

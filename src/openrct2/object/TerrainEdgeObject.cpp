@@ -33,8 +33,8 @@ void TerrainEdgeObject::Unload()
     UnloadImages();
 
     NameStringId = 0;
-    IconImageId = 0;
-    BaseImageId = 0;
+    IconImageId = ImageIndexUndefined;
+    BaseImageId = ImageIndexUndefined;
 }
 
 void TerrainEdgeObject::DrawPreview(DrawPixelInfo& dpi, int32_t width, int32_t height) const

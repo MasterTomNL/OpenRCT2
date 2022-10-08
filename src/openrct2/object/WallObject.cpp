@@ -34,7 +34,7 @@ void WallObject::ReadLegacy(IReadObjectContext* context, OpenRCT2::IStream* stre
     RCTObjectEntry sgEntry = stream->ReadValue<RCTObjectEntry>();
     SetPrimarySceneryGroup(ObjectEntryDescriptor(sgEntry));
 
-    GetImageTable().Read(context, stream);
+    ReadEmbeddedImages(*context, *stream);
 
     // Validate properties
     if (_legacyType.price <= 0.00_GBP)
@@ -64,7 +64,7 @@ void WallObject::Unload()
     UnloadImages();
 
     _legacyType.name = 0;
-    _legacyType.image = 0;
+    _legacyType.image = ImageIndexUndefined;
 }
 
 void WallObject::DrawPreview(DrawPixelInfo& dpi, int32_t width, int32_t height) const

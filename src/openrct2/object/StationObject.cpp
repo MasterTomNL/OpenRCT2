@@ -21,7 +21,7 @@ void StationObject::Load()
     GetStringTable().Sort();
     NameStringId = LanguageAllocateObjectString(GetName());
 
-    auto numImages = GetImageTable().GetCount();
+    auto numImages = GetNumImages();
     if (numImages != 0)
     {
         BaseImageId = LoadImages();

@@ -22,7 +22,7 @@ void EntranceObject::ReadLegacy(IReadObjectContext* context, OpenRCT2::IStream* 
     _legacyType.text_height = stream->ReadValue<uint8_t>();
 
     GetStringTable().Read(context, stream, ObjectStringID::NAME);
-    GetImageTable().Read(context, stream);
+    ReadEmbeddedImages(*context, *stream);
 }
 
 void EntranceObject::Load()
@@ -38,7 +38,7 @@ void EntranceObject::Unload()
     UnloadImages();
 
     _legacyType.string_idx = 0;
-    _legacyType.image_id = 0;
+    _legacyType.image_id = ImageIndexUndefined;
 }
 
 void EntranceObject::DrawPreview(DrawPixelInfo& dpi, int32_t width, int32_t height) const

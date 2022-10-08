@@ -18,6 +18,7 @@
 #include <openrct2/Input.h>
 #include <openrct2/OpenRCT2.h>
 #include <openrct2/config/Config.h>
+#include <openrct2/drawing/Image.h>
 #include <openrct2/entity/EntityRegistry.h>
 #include <openrct2/entity/Guest.h>
 #include <openrct2/entity/Staff.h>
@@ -229,7 +230,8 @@ static Widget window_game_bottom_toolbar_widgets[] =
             {
                 if (GetGameState().ClimateUpdateTimer < 960)
                 {
-                    GfxDrawSprite(dpi, ImageId(SPR_NEXT_WEATHER), screenCoords + ScreenCoordsXY{ 27, 5 });
+                    auto nextArrowImageIndex = GetImageIndex(ImageGroup::Interface, 0);
+                    GfxDrawSprite(dpi, ImageId(nextArrowImageIndex), screenCoords + ScreenCoordsXY{ 27, 5 });
                     GfxDrawSprite(dpi, ImageId(nextWeatherSpriteId), screenCoords + ScreenCoordsXY{ 40, 0 });
                 }
             }

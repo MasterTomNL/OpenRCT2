@@ -29,6 +29,7 @@
 #include "FootpathObject.h"
 #include "FootpathRailingsObject.h"
 #include "FootpathSurfaceObject.h"
+#include "ImageObject.h"
 #include "LargeSceneryObject.h"
 #include "MusicObject.h"
 #include "Object.h"
@@ -382,6 +383,9 @@ namespace ObjectFactory
             case ObjectType::Audio:
                 result = std::make_unique<AudioObject>();
                 break;
+            case ObjectType::Image:
+                result = std::make_unique<ImageObject>();
+                break;
             default:
                 throw std::runtime_error("Invalid object type");
         }
@@ -422,6 +426,8 @@ namespace ObjectFactory
             return ObjectType::FootpathRailings;
         if (s == "audio")
             return ObjectType::Audio;
+        if (s == "image")
+            return ObjectType::Image;
         return ObjectType::None;
     }
 

@@ -227,6 +227,7 @@
     <ClInclude Include="Diagnostic.h" />
     <ClInclude Include="drawing\Drawing.h" />
     <ClInclude Include="drawing\Font.h" />
+    <ClInclude Include="drawing\Gx.h" />
     <ClInclude Include="drawing\IDrawingContext.h" />
     <ClInclude Include="drawing\IDrawingEngine.h" />
     <ClInclude Include="drawing\Image.h" />
@@ -323,7 +324,9 @@
     <ClInclude Include="object\FootpathObject.h" />
     <ClInclude Include="object\FootpathRailingsObject.h" />
     <ClInclude Include="object\FootpathSurfaceObject.h" />
+    <ClInclude Include="object\ImageObject.h" />
     <ClInclude Include="object\ImageTable.h" />
+    <ClInclude Include="object\ImageTable2.h" />
     <ClInclude Include="object\LargeSceneryEntry.h" />
     <ClInclude Include="object\LargeSceneryObject.h" />
     <ClInclude Include="object\MusicObject.h" />
@@ -743,6 +746,7 @@
     <ClCompile Include="drawing\Drawing.Sprite.RLE.cpp" />
     <ClCompile Include="drawing\Drawing.String.cpp" />
     <ClCompile Include="drawing\Font.cpp" />
+    <ClCompile Include="drawing\Gx.cpp" />
     <ClCompile Include="drawing\Image.cpp" />
     <ClCompile Include="drawing\ImageImporter.cpp" />
     <ClCompile Include="drawing\LightFX.cpp" />
@@ -830,7 +834,9 @@
     <ClCompile Include="object\FootpathObject.cpp" />
     <ClCompile Include="object\FootpathRailingsObject.cpp" />
     <ClCompile Include="object\FootpathSurfaceObject.cpp" />
+    <ClCompile Include="object\ImageObject.cpp" />
     <ClCompile Include="object\ImageTable.cpp" />
+    <ClCompile Include="object\ImageTable2.cpp" />
     <ClCompile Include="object\LargeSceneryObject.cpp" />
     <ClCompile Include="object\MusicObject.cpp" />
     <ClCompile Include="object\Object.cpp" />

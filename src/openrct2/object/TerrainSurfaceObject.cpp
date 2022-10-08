@@ -34,7 +34,7 @@ void TerrainSurfaceObject::Load()
     {
         EntryBaseImageId = IconImageId + 1;
     }
-    NumEntries = (GetImageTable().GetCount() - EntryBaseImageId) / NUM_IMAGES_IN_ENTRY;
+    NumEntries = (GetNumImages() - EntryBaseImageId) / NUM_IMAGES_IN_ENTRY;
 }
 
 void TerrainSurfaceObject::Unload()
@@ -43,9 +43,9 @@ void TerrainSurfaceObject::Unload()
     UnloadImages();
 
     NameStringId = 0;
-    IconImageId = 0;
-    PatternBaseImageId = 0;
-    EntryBaseImageId = 0;
+    IconImageId = ImageIndexUndefined;
+    PatternBaseImageId = ImageIndexUndefined;
+    EntryBaseImageId = ImageIndexUndefined;
     NumEntries = 0;
 }
 

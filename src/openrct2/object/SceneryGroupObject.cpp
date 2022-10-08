@@ -50,7 +50,7 @@ void SceneryGroupObject::ReadLegacy(IReadObjectContext* context, IStream* stream
 
     GetStringTable().Read(context, stream, ObjectStringID::NAME);
     _items = ReadItems(stream);
-    GetImageTable().Read(context, stream);
+    ReadEmbeddedImages(*context, *stream);
 }
 
 void SceneryGroupObject::Load()
@@ -67,7 +67,7 @@ void SceneryGroupObject::Unload()
     UnloadImages();
 
     _legacyType.name = 0;
-    _legacyType.image = 0;
+    _legacyType.image = ImageIndexUndefined;
 }
 
 void SceneryGroupObject::DrawPreview(DrawPixelInfo& dpi, int32_t width, int32_t height) const

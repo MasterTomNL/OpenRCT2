@@ -12,6 +12,7 @@
 #include "../common.h"
 #include "../core/JsonFwd.hpp"
 #include "../core/String.hpp"
+#include "../drawing/Gx.h"
 #include "../util/Util.h"
 #include "ImageTable.h"
 #include "ObjectAsset.h"
@@ -150,8 +151,9 @@ struct ObjectEntryDescriptor
 struct IObjectRepository;
 namespace OpenRCT2
 {
+    class ImageTable2;
     struct IStream;
-}
+} // namespace OpenRCT2
 struct ObjectRepositoryItem;
 struct DrawPixelInfo;
 
@@ -193,11 +195,13 @@ private:
     ObjectVersion _version;
     ObjectEntryDescriptor _descriptor{};
     StringTable _stringTable;
-    ImageTable _imageTable;
+    std::unique_ptr<OpenRCT2::ImageTable2> _imageTable;
+    std::unique_ptr<OpenRCT2::ImageTable2> _loadedImageTable;
+    OpenRCT2::GxFile _embeddedImages;
     std::vector<ObjectSourceGame> _sourceGames;
     std::vector<std::string> _authors;
     ObjectGeneration _generation{};
-    bool _usesFallbackImages{};
+    //    bool _usesFallbackImages{};
     bool _isCompatibilityObject{};
     ImageIndex _baseImageId{ ImageIndexUndefined };
 
@@ -210,10 +214,9 @@ protected:
     {
         return _stringTable;
     }
-    ImageTable& GetImageTable()
-    {
-        return _imageTable;
-    }
+    OpenRCT2::ImageTable2* GetImageTable();
+
+    void ReadEmbeddedImages(IReadObjectContext& context, OpenRCT2::IStream& stream);
 
     /**
      * Populates the image and string tables from a JSON object
@@ -226,8 +229,12 @@ protected:
     std::string GetString(ObjectStringID index) const;
     std::string GetString(int32_t language, ObjectStringID index) const;
 
+    ImageIndex LoadImages();
+    void UnloadImages();
+
 public:
-    virtual ~Object() = default;
+    Object();
+    virtual ~Object();
 
     std::string_view GetIdentifier() const
     {
@@ -262,11 +269,12 @@ public:
         _descriptor = value;
     }
 
-    constexpr bool UsesFallbackImages() const
-    {
-        return _usesFallbackImages;
-    }
+    //    constexpr bool UsesFallbackImages() const
+    //    {
+    //        return _usesFallbackImages;
+    //    }
 
+    // Legacy data structures
     // DONOT USE THIS CAN LEAD TO OBJECT COLLISIONS
     std::string_view GetLegacyIdentifier() const
     {
@@ -317,17 +325,16 @@ public:
     bool IsCompatibilityObject() const;
     void SetIsCompatibilityObject(const bool on);
 
-    const ImageTable& GetImageTable() const
-    {
-        return _imageTable;
-    }
+    const OpenRCT2::ImageTable2* GetImageTable() const;
 
     ObjectEntryDescriptor GetScgPathXHeader() const;
     RCTObjectEntry CreateHeader(const char name[9], uint32_t flags, uint32_t checksum);
 
-    uint32_t GetNumImages() const
+    uint32_t GetNumImages() const;
+
+    const OpenRCT2::Gx& GetEmbeddedImages() const
     {
-        return GetImageTable().GetCount();
+        return _embeddedImages;
     }
 
     ImageIndex GetBaseImageId() const
@@ -352,7 +359,7 @@ const Object* ObjectEntryGetObject(ObjectType objectType, ObjectEntryIndex index
 
 constexpr bool IsIntransientObjectType(ObjectType type)
 {
-    return type == ObjectType::Audio;
+    return type == ObjectType::Audio || type == ObjectType::Image;
 }
 
 u8string VersionString(const ObjectVersion& version);

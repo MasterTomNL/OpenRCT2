@@ -24,7 +24,7 @@ void FootpathObject::ReadLegacy(IReadObjectContext* context, OpenRCT2::IStream* 
     stream->Seek(1, OpenRCT2::STREAM_SEEK_CURRENT);
 
     GetStringTable().Read(context, stream, ObjectStringID::NAME);
-    GetImageTable().Read(context, stream);
+    ReadEmbeddedImages(*context, *stream);
 
     // Validate properties
     if (_legacyType.support_type >= RailingEntrySupportType::Count)
@@ -65,7 +65,7 @@ void FootpathObject::Unload()
     UnloadImages();
 
     _legacyType.string_idx = 0;
-    _legacyType.image = 0;
+    _legacyType.image = ImageIndexUndefined;
 }
 
 void FootpathObject::DrawPreview(DrawPixelInfo& dpi, int32_t width, int32_t height) const

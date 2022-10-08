@@ -245,7 +245,7 @@ void RideObject::ReadLegacy(IReadObjectContext* context, IStream* stream)
         }
     }
 
-    GetImageTable().Read(context, stream);
+    ReadEmbeddedImages(*context, *stream);
 
     // Validate properties
     if (_legacyType.excitement_multiplier > 75)
@@ -346,7 +346,7 @@ void RideObject::Unload()
     _legacyType.naming.Name = 0;
     _legacyType.naming.Description = 0;
     _legacyType.capacity = 0;
-    _legacyType.images_offset = 0;
+    _legacyType.images_offset = ImageIndexUndefined;
 }
 
 void RideObject::DrawPreview(DrawPixelInfo& dpi, [[maybe_unused]] int32_t width, [[maybe_unused]] int32_t height) const
