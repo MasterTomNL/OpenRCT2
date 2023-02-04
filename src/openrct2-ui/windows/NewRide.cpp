@@ -274,184 +274,184 @@ static ImageIndex WindowNewRideGetAlternativeImage(uint8_t rideEntryIndex)
     }
 
     auto objectEntry = ObjectEntryGetObject(ObjectType::Ride, rideEntryIndex);
-    auto rideEntryName = objectEntry->GetLegacyIdentifier();
+    auto rideEntryName = objectEntry->GetIdentifier();
 
-    if (String::Equals(rideEntryName, "NRL     "))
+    if (String::Equals(rideEntryName, "rct2.ride.nrl"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::MiniatureRailway);
-    if (String::Equals(rideEntryName, "MONO2   "))
+    if (String::Equals(rideEntryName, "rct2.ride.mono2"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::Monorail);
-    if (String::Equals(rideEntryName, "CLIFT1  "))
+    if (String::Equals(rideEntryName, "rct2.ride.clift1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::Chairlift);
-    if (String::Equals(rideEntryName, "SMONO   "))
+    if (String::Equals(rideEntryName, "rct2.ride.smono"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SuspendedMonorail);
 
-    if (String::Equals(rideEntryName, "MONBK   "))
+    if (String::Equals(rideEntryName, "rct2.ride.monbk"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::CycleRailway);
-    if (String::Equals(rideEntryName, "CHBUILD "))
+    if (String::Equals(rideEntryName, "rct2.ride.chbuild"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::CrookedHouse);
-    if (String::Equals(rideEntryName, "HHBUILD "))
+    if (String::Equals(rideEntryName, "rct2.ride.hhbuild"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::HauntedHouse);
-    if (String::Equals(rideEntryName, "FWH1    "))
+    if (String::Equals(rideEntryName, "rct2.ride.fwh1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::FerrisWheel);
-    if (String::Equals(rideEntryName, "HMAZE   "))
+    if (String::Equals(rideEntryName, "rct2.ride.hmaze"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::HedgeMaze);
-    if (String::Equals(rideEntryName, "MGR1    "))
+    if (String::Equals(rideEntryName, "rct2.ride.mgr1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::MerryGoRound);
-    if (String::Equals(rideEntryName, "GOLF1   "))
+    if (String::Equals(rideEntryName, "rct2.ride.golf1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::MiniatureGolf);
-    if (String::Equals(rideEntryName, "OBS1    "))
+    if (String::Equals(rideEntryName, "rct2.ride.obs1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::ObservationTower);
-    if (String::Equals(rideEntryName, "SPCAR   "))
+    if (String::Equals(rideEntryName, "rct2.ride.spcar"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::CarRide);
-    if (String::Equals(rideEntryName, "HELICAR "))
+    if (String::Equals(rideEntryName, "rct2.ride.helicar"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::CycleMonorail);
-    if (String::Equals(rideEntryName, "HSKELT  "))
+    if (String::Equals(rideEntryName, "rct2.ride.hskelt"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SpiralSlide);
-    if (String::Equals(rideEntryName, "DODG1   "))
+    if (String::Equals(rideEntryName, "rct2.ride.dodg1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::Dodgems);
-    if (String::Equals(rideEntryName, "SRINGS  "))
+    if (String::Equals(rideEntryName, "rct2.ride.srings"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SpaceRings);
-    if (String::Equals(rideEntryName, "CIRCUS1 "))
+    if (String::Equals(rideEntryName, "rct2.ride.circus1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::Circus);
-    if (String::Equals(rideEntryName, "GTC     "))
+    if (String::Equals(rideEntryName, "rct2.ride.gtc"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::GhostTrain);
-    if (String::Equals(rideEntryName, "FSAUC   "))
+    if (String::Equals(rideEntryName, "rct2.ride.fsauc"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::FlyingSaucers);
 
-    if (String::Equals(rideEntryName, "MFT     "))
+    if (String::Equals(rideEntryName, "rct2.ride.mft"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::WoodenTwisterRollerCoaster);
-    if (String::Equals(rideEntryName, "WMOUSE  "))
+    if (String::Equals(rideEntryName, "rct2.ride.wmouse"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::WoodenCrazyRodentRollerCoaster);
-    if (String::Equals(rideEntryName, "SFRIC1  "))
+    if (String::Equals(rideEntryName, "rct2.ride.sfric1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::WoodenSideFrictionRollerCoaster);
-    if (String::Equals(rideEntryName, "VREEL   "))
+    if (String::Equals(rideEntryName, "rct2.ride.vreel"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::VirginiaReel);
-    if (String::Equals(rideEntryName, "REVCAR  "))
+    if (String::Equals(rideEntryName, "rct2.ride.revcar"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::WoodenReverseRollerCoaster);
-    if (String::Equals(rideEntryName, "SMC1    "))
+    if (String::Equals(rideEntryName, "rct2.ride.smc1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SteelWildMouseRollerCoaster);
-    if (String::Equals(rideEntryName, "IVMC1   "))
+    if (String::Equals(rideEntryName, "rct2.ride.ivmc1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::InvertedWildMouseCoaster);
-    if (String::Equals(rideEntryName, "AMT1    "))
+    if (String::Equals(rideEntryName, "rct2.ride.amt1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::MineTrainRollerCoaster);
     // Skipping Looping RC, as it's too different.
-    if (String::Equals(rideEntryName, "TOGST   "))
+    if (String::Equals(rideEntryName, "rct2.ride.togst"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::StandUpSteelRollerCoaster);
-    if (String::Equals(rideEntryName, "BMSD    "))
+    if (String::Equals(rideEntryName, "rct2.ride.bmsd"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SteelTwisterRollerCoaster);
-    if (String::Equals(rideEntryName, "BMSU    "))
+    if (String::Equals(rideEntryName, "rct2.ride.bmsu"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SteelTwisterRollerCoaster);
-    if (String::Equals(rideEntryName, "BMFL    "))
+    if (String::Equals(rideEntryName, "rct2.ride.bmfl"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SteelTwisterRollerCoaster);
-    if (String::Equals(rideEntryName, "ARRSW1  "))
+    if (String::Equals(rideEntryName, "rct2.ride.arrsw1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SuspendedRollerCoaster);
     // Skipping Compact Inverted
-    if (String::Equals(rideEntryName, "NEMT    "))
+    if (String::Equals(rideEntryName, "rct2.ride.nemt"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::InvertedRollerCoaster);
     // Skipping mini suspended
-    if (String::Equals(rideEntryName, "STEEP1  "))
+    if (String::Equals(rideEntryName, "rct2.ride.steep1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SingleRailRollerCoaster);
-    if (String::Equals(rideEntryName, "BOB1    "))
+    if (String::Equals(rideEntryName, "rct2.ride.bob1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::BobsledRollerCoaster);
-    if (String::Equals(rideEntryName, "UTCAR   "))
+    if (String::Equals(rideEntryName, "rct2.ride.utcar"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::HeartlineTwisterRollerCoaster);
-    if (String::Equals(rideEntryName, "UTCARR  "))
+    if (String::Equals(rideEntryName, "rct2.ride.utcarr"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::HeartlineTwisterRollerCoaster);
-    if (String::Equals(rideEntryName, "VEKST   "))
+    if (String::Equals(rideEntryName, "rct2.ride.vekst"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::FlyingRollerCoaster);
-    if (String::Equals(rideEntryName, "REVF1   "))
+    if (String::Equals(rideEntryName, "rct2.ride.revf1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::ReverseFreefallRollerCoaster);
-    if (String::Equals(rideEntryName, "BMVD    "))
+    if (String::Equals(rideEntryName, "rct2.ride.bmvd"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::VerticalRollerCoaster);
-    if (String::Equals(rideEntryName, "THCAR   "))
+    if (String::Equals(rideEntryName, "rct2.ride.thcar"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::AirPoweredVerticalCoaster);
 
-    if (String::Equals(rideEntryName, "TWIST1  "))
+    if (String::Equals(rideEntryName, "rct2.ride.twist1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::Twist);
-    if (String::Equals(rideEntryName, "SSC1    "))
+    if (String::Equals(rideEntryName, "rct2.ride.ssc1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::LaunchedFreefall);
-    if (String::Equals(rideEntryName, "SWSH1   "))
+    if (String::Equals(rideEntryName, "rct2.ride.swsh1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SwingingShip);
-    if (String::Equals(rideEntryName, "SWSH2   "))
+    if (String::Equals(rideEntryName, "rct2.ride.swsh2"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SwingingInverterShip);
-    if (String::Equals(rideEntryName, "SIMPOD  "))
+    if (String::Equals(rideEntryName, "rct2.ride.simpod"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::MotionSimulator);
-    if (String::Equals(rideEntryName, "C3D     "))
+    if (String::Equals(rideEntryName, "rct2.ride.c3d"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::_3DCinema);
-    if (String::Equals(rideEntryName, "TOPSP1  "))
+    if (String::Equals(rideEntryName, "rct2.ride.topsp1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::TopSpin);
-    if (String::Equals(rideEntryName, "GDROP1  "))
+    if (String::Equals(rideEntryName, "rct2.ride.gdrop1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::RotoDrop);
-    if (String::Equals(rideEntryName, "ENTERP  "))
+    if (String::Equals(rideEntryName, "rct2.ride.enterp"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::Enterprise);
 
-    if (String::Equals(rideEntryName, "DING1   "))
+    if (String::Equals(rideEntryName, "rct2.ride.ding1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::WaterSlide);
-    if (String::Equals(rideEntryName, "LFB1    "))
+    if (String::Equals(rideEntryName, "rct2.ride.lfb1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::LogFlume);
-    if (String::Equals(rideEntryName, "RAPBOAT "))
+    if (String::Equals(rideEntryName, "rct2.ride.rapboat"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::RiverRapids);
-    if (String::Equals(rideEntryName, "SPBOAT  "))
+    if (String::Equals(rideEntryName, "rct2.ride.spboat"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::RiverRide);
-    if (String::Equals(rideEntryName, "RBOAT   "))
+    if (String::Equals(rideEntryName, "rct2.ride.rboat"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::BoatHire);
-    if (String::Equals(rideEntryName, "RFTBOAT "))
+    if (String::Equals(rideEntryName, "rct2.ride.rftboat"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::RaftRide);
-    if (String::Equals(rideEntryName, "CSTBOAT "))
+    if (String::Equals(rideEntryName, "rct2.ride.cstboat"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::WaterCoaster);
 
-    if (String::Equals(rideEntryName, "INFOK   "))
+    if (String::Equals(rideEntryName, "rct2.ride.infok"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::InformationKiosk);
 
-    if (String::Equals(rideEntryName, "BURGB   "))
+    if (String::Equals(rideEntryName, "rct2.ride.burgb"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::BurgerBar);
-    if (String::Equals(rideEntryName, "CHCKS   "))
+    if (String::Equals(rideEntryName, "rct2.ride.chcks"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::FriedChickenStall);
-    if (String::Equals(rideEntryName, "CHPSH   "))
+    if (String::Equals(rideEntryName, "rct2.ride.chpsh"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::ChipsStall);
-    if (String::Equals(rideEntryName, "CNDYF   "))
+    if (String::Equals(rideEntryName, "rct2.ride.cndyf"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::CandyflossStall);
-    if (String::Equals(rideEntryName, "DOUGH   "))
+    if (String::Equals(rideEntryName, "rct2.ride.dough"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::DoughnutShop);
-    if (String::Equals(rideEntryName, "HOTDS   "))
+    if (String::Equals(rideEntryName, "rct2.ride.hotds"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::HotDogStall);
-    if (String::Equals(rideEntryName, "ICECR1  "))
+    if (String::Equals(rideEntryName, "rct2.ride.icecr1"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::IceCreamStall);
-    if (String::Equals(rideEntryName, "PIZZS   "))
+    if (String::Equals(rideEntryName, "rct2.ride.pizzs"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::PizzaStall);
-    if (String::Equals(rideEntryName, "POPCS   "))
+    if (String::Equals(rideEntryName, "rct2.ride.popcs"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::PopcornStall);
-    if (String::Equals(rideEntryName, "SQDST   "))
+    if (String::Equals(rideEntryName, "rct2.ride.sqdst"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::ExoticSeaFoodStall);
-    if (String::Equals(rideEntryName, "TOFFS   "))
+    if (String::Equals(rideEntryName, "rct2.ride.toffs"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::ToffeeAppleStall);
 
-    if (String::Equals(rideEntryName, "COFFS   "))
+    if (String::Equals(rideEntryName, "rct2.ride.coffs"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::CoffeeShop);
-    if (String::Equals(rideEntryName, "DRNKS   "))
+    if (String::Equals(rideEntryName, "rct2.ride.drnks"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::DrinkStall);
-    if (String::Equals(rideEntryName, "LEMST   "))
+    if (String::Equals(rideEntryName, "rct2.ride.lemst"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::LemonadeStall);
 
-    if (String::Equals(rideEntryName, "BALLN   "))
+    if (String::Equals(rideEntryName, "rct2.ride.balln"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::BalloonStall);
-    if (String::Equals(rideEntryName, "HATST   "))
+    if (String::Equals(rideEntryName, "rct2.ride.hatst"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::HatStall);
-    if (String::Equals(rideEntryName, "SOUVS   "))
+    if (String::Equals(rideEntryName, "rct2.ride.souvs"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SouvenirStall);
-    if (String::Equals(rideEntryName, "TSHRT   "))
+    if (String::Equals(rideEntryName, "rct2.ride.tshrt"))
         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::TShirtStall);
 
     // No longer needed
-    //     if (String::Equals(rideEntryName, "TLT1    "))
+    //     if (String::Equals(rideEntryName, "rct2.ride.tlt1"))
     //         return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::Toilets);
-    //    if (String::Equals(rideEntryName, "PTCT1   "))
+    //    if (String::Equals(rideEntryName, "rct2.ride.ptct1"))
     //        return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::WoodenRollerCoaster);
-    //    if (String::Equals(rideEntryName, "ZLDB    "))
+    //    if (String::Equals(rideEntryName, "rct2.ride.zldb"))
     //        return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SteelMiniRollerCoaster);
-    //    if (String::Equals(rideEntryName, "ARRT1   "))
+    //    if (String::Equals(rideEntryName, "rct2.ride.arrt1"))
     //        return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::SteelCorkscrewRollerCoaster);
-    //    if (String::Equals(rideEntryName, "KART1   "))
+    //    if (String::Equals(rideEntryName, "rct2.ride.kart1"))
     //        return SPR_CSG_RIDE_PREVIEWS_BEGIN + EnumValue(RCT1::RideType::GoKarts);
 
     return static_cast<ImageIndex>(SPR_NONE);
