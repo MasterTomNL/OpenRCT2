@@ -1516,7 +1516,7 @@ static void PaintMiniatureRailwayTrackLeftEighthToDiag(
 
     bool isSupported = false;
     bool isRightEighthToOrthog = trackElement.GetTrackType() == TrackElemType::RightEighthToOrthogonal;
-    // Right eighth to orthogonal calls this function but we do not want to have a support call for it
+    // Left eighth to orthogonal calls this function but we do not want to have a support call for it
     // for track sequence 4
     if (trackSequence != 4 || !isRightEighthToOrthog)
     {
@@ -1761,9 +1761,9 @@ static constexpr bool miniature_railway_diag_image_segment[][4] = {
 
 static constexpr std::optional<WoodenSupportSubType> _diagSupportTypes[NumOrthogonalDirections][4] = {
     { WoodenSupportSubType::NeSw, WoodenSupportSubType::Corner0, WoodenSupportSubType::Corner2, WoodenSupportSubType::NeSw },
-    { WoodenSupportSubType::NeSw, WoodenSupportSubType::Corner1, WoodenSupportSubType::Corner3, WoodenSupportSubType::NwSe },
+    { WoodenSupportSubType::NwSe, WoodenSupportSubType::Corner1, WoodenSupportSubType::Corner3, WoodenSupportSubType::NwSe },
     { WoodenSupportSubType::NeSw, WoodenSupportSubType::Corner2, WoodenSupportSubType::Corner0, WoodenSupportSubType::NeSw },
-    { WoodenSupportSubType::NeSw, WoodenSupportSubType::Corner3, WoodenSupportSubType::Corner1, WoodenSupportSubType::NwSe },
+    { WoodenSupportSubType::NwSe, WoodenSupportSubType::Corner3, WoodenSupportSubType::Corner1, WoodenSupportSubType::NwSe },
 };
 
 struct FloorDescriptor
@@ -1972,10 +1972,10 @@ static void MiniatureRailwayTrackDiag25DegUpToFlat(
     const TrackElement& trackElement)
 {
     static constexpr int8_t supportOffsets[][4] = {
-        { 0, +8, +8, +8 },
-        { 0, -8, -8, 0 },
-        { 0, +8, +8, +8 },
-        { 0, -8, -8, +8 },
+        { +8, +8, +8, +8 },
+        { +8, -8, -8, 0 },
+        { +8, +8, +8, +8 },
+        { +8, -8, -8, +8 },
     };
 
     bool hasSupports = false;
@@ -2010,10 +2010,10 @@ static void MiniatureRailwayTrackDiag25DegUpToFlat(
     }
 
     static constexpr int8_t offsetsB[4][4][2] = {
-        { { 0, 0 }, { +8, +16 }, { +8, +8 }, { +8, +8 } },
-        { { 0, 0 }, { -8, -8 }, { -8, -8 }, { +8, +8 } },
-        { { 0, 0 }, { +8, +8 }, { +8, +16 }, { +8, +8 } },
-        { { 0, 0 }, { -8, -8 }, { -8, -8 }, { +8, +8 } },
+        { { 8, 8 }, { +8, +16 }, { +8, +8 }, { +8, +8 } },
+        { { 8, 8 }, { -8, -8 }, { -8, -8 }, { +8, +8 } },
+        { { 8, 8 }, { +8, +8 }, { +8, +16 }, { +8, +8 } },
+        { { 8, 8 }, { -8, -8 }, { -8, -8 }, { +8, +8 } },
     };
 
     uint32_t imageId = miniature_railway_track_pieces_diag_25_deg_up_to_flat[direction];
@@ -2205,7 +2205,7 @@ static void MiniatureRailwayTrackDiag25DegDownToFlat(
     uint32_t floorImage = 0;
     CoordsXY floorBoundSize;
     CoordsXY floorBoundOffset;
-    auto supportType = _diagSupportTypes[direction][trackSequence];
+    int16_t supportType = monorail_diag_support_types[direction][trackSequence];
 
     if (supportType.has_value())
     {
