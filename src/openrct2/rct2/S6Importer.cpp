@@ -100,6 +100,7 @@ namespace RCT2
         ObjectEntryIndex _pathToRailingMap[16];
         RCT12::EntryList _terrainSurfaceEntries;
         RCT12::EntryList _terrainEdgeEntries;
+        RCT12::EntryList _mazeEntries;
 
     public:
         S6Importer(IObjectRepository& objectRepository)
@@ -788,7 +789,12 @@ namespace RCT2
 
             ObjectEntryIndex rideType = src->Type;
             auto subtype = RCTEntryIndexToOpenRCT2EntryIndex(src->Subtype);
-            if (RCT2RideTypeNeedsConversion(src->Type))
+            if (src->Type == RIDE_TYPE_MAZE)
+            {
+                auto entryName = GetMazeObject(src->TrackColourSupports[0]);
+                subtype = ObjectManagerGetLoadedObjectEntryIndex(ObjectEntryDescriptor(entryName));
+            }
+            else if (RCT2RideTypeNeedsConversion(src->Type))
             {
                 auto* rideEntry = GetRideEntryByIndex(subtype);
                 if (rideEntry != nullptr)
@@ -1881,13 +1887,19 @@ namespace RCT2
             int objectIt = 0;
             ObjectEntryIndex surfaceCount = 0;
             ObjectEntryIndex railingCount = 0;
-            for (int16_t objectType = EnumValue(ObjectType::Ride); objectType <= EnumValue(ObjectType::Water); objectType++)
+            bool addMaze = false;
+            for (int16_t objectType = EnumValue(ObjectType::Ride); objectType <= EnumValue(ObjectType::ScenarioText);
+                 objectType++)
             {
                 for (int16_t i = 0; i < RCT2ObjectEntryGroupCounts[objectType]; i++, objectIt++)
                 {
                     auto entry = ObjectEntryDescriptor(_s6.Objects[objectIt]);
                     if (entry.HasValue())
                     {
+                        if (objectType == EnumValue(ObjectType::ScenarioText))
+                        {
+                            LOG_ERROR("Skipping %s", u8string(entry.GetName()).c_str());
+                        }
                         if (objectType == EnumValue(ObjectType::Paths))
                         {
                             auto footpathMapping = GetFootpathSurfaceId(entry);
@@ -1926,6 +1938,10 @@ namespace RCT2
                                 }
                                 _pathToRailingMap[i] = railingIndex;
                             }
+                        }
+                        else if (objectType == EnumValue(ObjectType::Ride) && entry.GetName() == "HMAZE   ")
+                        {
+                            addMaze = true;
                         }
                         else
                         {
@@ -1966,6 +1982,17 @@ namespace RCT2
 
             AppendRequiredObjects(objectList, ObjectType::TerrainSurface, _terrainSurfaceEntries);
             AppendRequiredObjects(objectList, ObjectType::TerrainEdge, _terrainEdgeEntries);
+
+            if (addMaze)
+            {
+                for (const auto objectName : MazeTypes)
+                {
+                    auto descriptor = ObjectEntryDescriptor(objectName);
+                    descriptor.Type = ObjectType::Ride;
+                    objectList.Add(descriptor);
+                }
+            }
+
             RCT12AddDefaultObjects(objectList);
             return objectList;
         }

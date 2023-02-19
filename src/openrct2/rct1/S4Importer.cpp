@@ -605,11 +605,22 @@ namespace RCT1
 
             if (_rideTypeToRideEntryMap[EnumValue(rideType)] == OBJECT_ENTRY_INDEX_NULL)
             {
-                auto entryName = RCT1::GetRideTypeObject(rideType);
-                if (!entryName.empty())
+                if (rideType == RCT1::RideType::HedgeMaze)
                 {
-                    auto entryIndex = _rideEntries.GetOrAddEntry(entryName);
+                    auto entryIndex = _rideEntries.GetOrAddEntry("rct2.ride.maze_hedges");
                     _rideTypeToRideEntryMap[EnumValue(rideType)] = entryIndex;
+                    _rideEntries.GetOrAddEntry("rct2.ride.maze_brick");
+                    _rideEntries.GetOrAddEntry("rct2.ride.maze_wood");
+                    _rideEntries.GetOrAddEntry("rct2.ride.maze_ice");
+                }
+                else
+                {
+                    auto entryName = RCT1::GetRideTypeObject(rideType);
+                    if (!entryName.empty())
+                    {
+                        auto entryIndex = _rideEntries.GetOrAddEntry(entryName);
+                        _rideTypeToRideEntryMap[EnumValue(rideType)] = entryIndex;
+                    }
                 }
             }
         }
@@ -1152,14 +1163,17 @@ namespace RCT1
                 }
             }
 
-            // In RCT1 and AA, the maze was always hedges.
-            // LL has 4 types, like RCT2. For LL, only guard against invalid values.
+            // In RCT1 and AA, the maze was always hedges. LL has 4 types, like RCT2.
             if (src->Type == RideType::HedgeMaze)
             {
-                if (_gameVersion < FILE_VERSION_RCT1_LL || src->TrackColourSupports[0] > 3)
-                    dst->track_colour[0].supports = MAZE_WALL_TYPE_HEDGE;
+                if (_gameVersion < FILE_VERSION_RCT1_LL)
+                {
+                    dst->subtype = _rideEntries.GetOrAddEntry("rct2.ride.maze_hedges");
+                }
                 else
-                    dst->track_colour[0].supports = src->TrackColourSupports[0];
+                {
+                    dst->subtype = _rideEntries.GetOrAddEntry(GetMazeObject(src->TrackColourSupports[0]));
+                }
             }
         }
 

@@ -74,6 +74,13 @@ constexpr uint8_t RCT12PeepThoughtItemNone = std::numeric_limits<uint8_t>::max()
 constexpr uint8_t RCT12GuestsInParkHistoryFactor = 20;
 constexpr uint8_t RCT12ParkHistoryUndefined = std::numeric_limits<uint8_t>::max();
 
+constexpr u8string_view MazeTypes[] = {
+    "rct2.ride.maze_brick",
+    "rct2.ride.maze_hedges",
+    "rct2.ride.maze_ice",
+    "rct2.ride.maze_wood",
+};
+
 enum class RCT12TrackDesignVersion : uint8_t
 {
     TD4,
@@ -871,6 +878,7 @@ std::optional<uint8_t> GetStyleFromMusicIdentifier(std::string_view identifier);
 void RCT12AddDefaultObjects(ObjectList& objectList);
 void AppendRequiredObjects(ObjectList& objectList, ObjectType objectType, const RCT12::EntryList& entryList);
 bool IsUserStringID(StringId stringId);
+u8string_view GetMazeObject(uint8_t mazeStyle);
 
 static constexpr money32 RCT12_COMPANY_VALUE_ON_FAILED_OBJECTIVE = 0x80000001;
 

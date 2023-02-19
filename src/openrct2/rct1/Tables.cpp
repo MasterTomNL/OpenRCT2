@@ -720,7 +720,7 @@ namespace RCT1
             "rct2.ride.amt1",                        // RCT1_RIDE_TYPE_MINE_TRAIN_ROLLER_COASTER
             "rct2.ride.clift1",                      // RCT1_RIDE_TYPE_CHAIRLIFT
             "rct1.ride.corkscrew_trains",            // RCT1_RIDE_TYPE_STEEL_CORKSCREW_ROLLER_COASTER
-            "rct2.ride.hmaze",                       // RCT1_RIDE_TYPE_HEDGE_MAZE
+            "rct2.ride.maze_hedges",                 // RCT1_RIDE_TYPE_HEDGE_MAZE
             "rct2.ride.hskelt",                      // RCT1_RIDE_TYPE_SPIRAL_SLIDE
             "rct1.ride.go_karts",                    // RCT1_RIDE_TYPE_GO_KARTS
             "rct2.ride.lfb1",                        // RCT1_RIDE_TYPE_LOG_FLUME

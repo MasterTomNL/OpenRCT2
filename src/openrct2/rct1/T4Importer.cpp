@@ -31,6 +31,7 @@ namespace RCT1
     private:
         OpenRCT2::MemoryStream _stream;
         std::string _name;
+        RCT12TrackDesignVersion _version;
 
     public:
         TD4Importer()
@@ -64,15 +65,15 @@ namespace RCT1
             std::unique_ptr<TrackDesign> td = std::make_unique<TrackDesign>();
 
             _stream.SetPosition(7);
-            RCT12TrackDesignVersion version = static_cast<RCT12TrackDesignVersion>(_stream.ReadValue<uint8_t>() >> 2);
+            _version = static_cast<RCT12TrackDesignVersion>(_stream.ReadValue<uint8_t>() >> 2);
 
-            if (version != RCT12TrackDesignVersion::TD4 && version != RCT12TrackDesignVersion::TD4_AA)
+            if (_version != RCT12TrackDesignVersion::TD4 && _version != RCT12TrackDesignVersion::TD4_AA)
             {
                 throw IOException("Version number incorrect.");
             }
             _stream.SetPosition(0);
 
-            if (version == RCT12TrackDesignVersion::TD4_AA)
+            if (_version == RCT12TrackDesignVersion::TD4_AA)
             {
                 return ImportAA();
             }
@@ -96,6 +97,19 @@ namespace RCT1
 
             td->flags2 = td4aa.Flags2;
 
+            std::string_view vehicleObject;
+            if (td4aa.Type == RideType::HedgeMaze)
+            {
+                vehicleObject = GetMazeObject(td4aa.TrackSupportColour[0]);
+                LOG_ERROR("maze object %s", u8string(vehicleObject).c_str());
+            }
+            else
+            {
+                vehicleObject = RCT1::GetVehicleObject(td4aa.VehicleType);
+            }
+            assert(!vehicleObject.empty());
+            td->vehicle_object = ObjectEntryDescriptor(vehicleObject);
+
             return ImportTD4Base(std::move(td), td4aa);
         }
 
@@ -110,18 +124,26 @@ namespace RCT1
                 td->track_rail_colour[i] = RCT1::GetColour(td4.TrackRailColourV0);
                 td->track_support_colour[i] = RCT1::GetColour(td4.TrackSupportColourV0);
 
-                // Mazes were only hedges
-                if (td4.Type == RideType::HedgeMaze)
-                {
-                    td->track_support_colour[i] = MAZE_WALL_TYPE_HEDGE;
-                }
-                else if (td4.Type == RideType::RiverRapids)
+                if (td4.Type == RideType::RiverRapids)
                 {
                     td->track_spine_colour[i] = COLOUR_WHITE;
                     td->track_rail_colour[i] = COLOUR_WHITE;
                 }
             }
             td->flags2 = 0;
+
+            std::string_view vehicleObject;
+            if (td4.Type == RideType::HedgeMaze)
+            {
+                vehicleObject = "rct2.ride.maze_hedges";
+            }
+            else
+            {
+                vehicleObject = RCT1::GetVehicleObject(td4.VehicleType);
+            }
+            assert(!vehicleObject.empty());
+            td->vehicle_object = ObjectEntryDescriptor(vehicleObject);
+
             return ImportTD4Base(std::move(td), td4);
         }
 
@@ -136,18 +158,6 @@ namespace RCT1
                 td->ride_mode = RideMode::PoweredLaunch;
             }
 
-            // Convert RCT1 vehicle type to RCT2 vehicle type. Initialise with a string consisting of 8 spaces.
-            std::string_view vehicleObject;
-            if (td4Base.Type == RideType::HedgeMaze)
-            {
-                vehicleObject = RCT1::GetRideTypeObject(td4Base.Type);
-            }
-            else
-            {
-                vehicleObject = RCT1::GetVehicleObject(td4Base.VehicleType);
-            }
-            assert(!vehicleObject.empty());
-            td->vehicle_object = ObjectEntryDescriptor(vehicleObject);
             td->vehicle_type = td4Base.VehicleType;
 
             td->flags = td4Base.Flags;

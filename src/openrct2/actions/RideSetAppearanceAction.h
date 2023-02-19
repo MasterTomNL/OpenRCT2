@@ -16,7 +16,7 @@ enum class RideSetAppearanceType : uint8_t
     TrackColourMain,
     TrackColourAdditional,
     TrackColourSupports,
-    MazeStyle = TrackColourSupports,
+    MazeStyle,
     VehicleColourBody,
     VehicleColourTrim,
     VehicleColourTernary,

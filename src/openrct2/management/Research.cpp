@@ -844,8 +844,10 @@ void ResearchFix()
     ResearchRemoveNullItems(gResearchItemsUninvented);
 
     // Add missing entries to the research list
-    // If research is complete, mark all the missing items as available
-    ResearchAddAllMissingItems(gResearchProgressStage == RESEARCH_STAGE_FINISHED_ALL);
+    if (gResearchProgressStage == RESEARCH_STAGE_FINISHED_ALL)
+    {
+        ResearchAddAllMissingItems(true);
+    }
 
     // Now rebuild all the tables that say whether a ride or scenery item is invented
     ResearchRebuildInventedTables();

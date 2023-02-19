@@ -2139,10 +2139,6 @@ STR_3051    :Golf hole C
 STR_3052    :Golf hole D
 STR_3053    :Golf hole E
 STR_3054    :Loading…
-STR_3058    :Brick walls
-STR_3059    :Hedges
-STR_3060    :Ice blocks
-STR_3061    :Wooden fences
 STR_3062    :Standard roller coaster track
 STR_3063    :Water channel (track submerged)
 STR_3064    :Beginner Parks

@@ -575,14 +575,6 @@ struct WindowRideMazeDesignOption
     uint32_t sprite;
 };
 
-static constexpr std::array MazeOptions = {
-    WindowRideMazeDesignOption{ STR_RIDE_DESIGN_MAZE_BRICK_WALLS, SPR_RIDE_DESIGN_PREVIEW_MAZE_BRICK_WALLS },
-    WindowRideMazeDesignOption{ STR_RIDE_DESIGN_MAZE_HEDGES, SPR_RIDE_DESIGN_PREVIEW_MAZE_HEDGES },
-    WindowRideMazeDesignOption{ STR_RIDE_DESIGN_MAZE_ICE_BLOCKS, SPR_RIDE_DESIGN_PREVIEW_MAZE_ICE_BLOCKS },
-    WindowRideMazeDesignOption{ STR_RIDE_DESIGN_MAZE_WOODEN_FENCES, SPR_RIDE_DESIGN_PREVIEW_MAZE_WOODEN_FENCES },
-};
-static_assert(std::size(MazeOptions) == 4);
-
 struct GraphsYAxis
 {
     uint8_t interval;
@@ -4138,17 +4130,7 @@ private:
                     this, &widgets[widgetIndex], colours[1], ride->track_colour[colourSchemeIndex].supports);
                 break;
             case WIDX_MAZE_STYLE_DROPDOWN:
-                for (i = 0; i < 4; i++)
-                {
-                    gDropdownItems[i].Format = STR_DROPDOWN_MENU_LABEL;
-                    gDropdownItems[i].Args = MazeOptions[i].text;
-                }
-
-                WindowDropdownShowTextCustomWidth(
-                    { windowPos.x + dropdownWidget->left, windowPos.y + dropdownWidget->top }, dropdownWidget->height() + 1,
-                    colours[1], 0, Dropdown::Flag::StayOpen, 4, widgets[widgetIndex].right - dropdownWidget->left);
-
-                Dropdown::SetChecked(ride->track_colour[colourSchemeIndex].supports, true);
+                ShowVehicleTypeDropdown(&widgets[widgetIndex]);
                 break;
             case WIDX_ENTRANCE_STYLE_DROPDOWN:
             {
@@ -4263,10 +4245,18 @@ private:
             break;
             case WIDX_MAZE_STYLE_DROPDOWN:
             {
-                auto rideSetAppearanceAction = RideSetAppearanceAction(
-                    rideId, RideSetAppearanceType::MazeStyle, dropdownIndex, _rideColour);
-                GameActions::Execute(&rideSetAppearanceAction);
-            }
+                if (dropdownIndex >= 0 && static_cast<std::size_t>(dropdownIndex) < _vehicleDropdownData.size())
+                {
+                    auto ride = GetRide(rideId);
+                    if (ride != nullptr)
+                    {
+                        auto newRideType = _vehicleDropdownData[dropdownIndex].SubTypeId;
+                        auto rideSetAppearanceAction = RideSetAppearanceAction(
+                            rideId, RideSetAppearanceType::MazeStyle, newRideType, 0);
+                        GameActions::Execute(&rideSetAppearanceAction);
+                    }
+                }
+        }
             break;
             case WIDX_ENTRANCE_STYLE_DROPDOWN:
             {
@@ -4390,7 +4380,7 @@ private:
         {
             widgets[WIDX_MAZE_STYLE].type = WindowWidgetType::DropdownMenu;
             widgets[WIDX_MAZE_STYLE_DROPDOWN].type = WindowWidgetType::Button;
-            widgets[WIDX_MAZE_STYLE].text = MazeOptions[trackColour.supports].text;
+            widgets[WIDX_MAZE_STYLE].text = rideEntry->naming.Name;
         }
         else
         {
@@ -4631,7 +4621,7 @@ private:
             const auto& rtd = ride->GetRideTypeDescriptor();
             if (rtd.HasFlag(RIDE_TYPE_FLAG_IS_MAZE))
             {
-                GfxDrawSprite(dpi, ImageId(MazeOptions[trackColour.supports].sprite), screenCoords);
+            GfxDrawSprite(dpi, ImageId(rideEntry->Cars[0].base_image_id), screenCoords);
             }
             else
             {

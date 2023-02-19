@@ -868,3 +868,11 @@ ResearchItem RCT12ResearchItem::ToResearchItem() const
 
     return newResearchItem;
 }
+
+u8string_view GetMazeObject(uint8_t mazeStyle)
+{
+    if (mazeStyle >= std::size(MazeTypes))
+        return MazeTypes[MAZE_WALL_TYPE_HEDGE];
+
+    return MazeTypes[mazeStyle];
+}

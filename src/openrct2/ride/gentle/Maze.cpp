@@ -26,14 +26,6 @@ using namespace OpenRCT2::TrackMetaData;
 
 enum
 {
-    SprMazeBaseHedge = 21938,
-    SprMazeBaseBrick = 21951,
-    SprMazeBaseIce = 21964,
-    SprMazeBaseWood = 21977,
-};
-
-enum
-{
     SprMazeOffsetWallCentre = 0,
     SprMazeOffsetWallInnerNeSw,
     SprMazeOffsetWallInnerNwSe,
@@ -56,35 +48,23 @@ static void MazePaintSetup(
     PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
     const TrackElement& trackElement)
 {
+    auto rideEntry = ride.GetRideEntry();
+    if (rideEntry == nullptr)
+        return;
+
     uint16_t mazeEntry = trackElement.GetMazeEntry();
     mazeEntry = Numerics::rol16(mazeEntry, direction * 4);
 
     uint32_t rotation = session.CurrentRotation;
     // draw ground
-    auto imageId = session.TrackColours[SCHEME_MISC].WithIndex(SPR_TERRAIN_DIRT);
+    auto imageId = session.TrackColours[SCHEME_MISC].WithIndex(rideEntry->Cars[0].base_image_id + 1);
     PaintAddImageAsParent(session, imageId, { 0, 0, height }, { 32, 32, 0 });
 
     WoodenASupportsPaintSetup(session, (rotation & 1) ? 0 : 1, 0, height, session.TrackColours[SCHEME_3]);
 
     PaintUtilSetSegmentSupportHeight(session, SEGMENTS_ALL & ~SEGMENT_C4, 0xFFFF, 0);
 
-    int32_t baseImageId = 0;
-    switch (ride.track_colour[0].supports)
-    {
-        case 0:
-            baseImageId = SprMazeBaseBrick;
-            break;
-        case 1:
-            baseImageId = SprMazeBaseHedge;
-            break;
-        case 2:
-            baseImageId = SprMazeBaseIce;
-            break;
-        case 3:
-            baseImageId = SprMazeBaseWood;
-            break;
-    }
-
+    int32_t baseImageId = rideEntry->Cars[0].base_image_id + 2;
     auto baseImage = session.TrackColours[SCHEME_MISC].WithIndex(baseImageId);
 
     imageId = baseImage.WithIndexOffset(SprMazeOffsetWallCentre);

@@ -122,7 +122,7 @@ namespace RCT2
                 td->track_support_colour[i] = td6.TrackSupportColour[i];
             }
             td->flags2 = td6.Flags2;
-            td->vehicle_object = ObjectEntryDescriptor(td6.VehicleObject);
+            td->vehicle_object = GetVehicleObject(td6);
             td->space_required_x = td6.SpaceRequiredX;
             td->space_required_y = td6.SpaceRequiredY;
             td->lift_hill_speed = td6.LiftHillSpeedNumCircuits & 0b00011111;
@@ -230,6 +230,18 @@ namespace RCT2
                     }
                     rawObject->Unload();
                 }
+            }
+        }
+
+        ObjectEntryDescriptor GetVehicleObject(const TD6Track& td6)
+        {
+            if (td6.Type == RIDE_TYPE_MAZE)
+            {
+                return ObjectEntryDescriptor(GetMazeObject(td6.TrackSupportColour[0]));
+            }
+            else
+            {
+                return ObjectEntryDescriptor(td6.VehicleObject);
             }
         }
     };

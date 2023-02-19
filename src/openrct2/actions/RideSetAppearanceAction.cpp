@@ -68,6 +68,9 @@ GameActions::Result RideSetAppearanceAction::Query() const
                 return GameActions::Result(GameActions::Status::InvalidParameters, STR_NONE, STR_NONE);
             }
             break;
+        case RideSetAppearanceType::MazeStyle:
+            // TODO implement
+            break;
         case RideSetAppearanceType::VehicleColourBody:
         case RideSetAppearanceType::VehicleColourTrim:
         case RideSetAppearanceType::VehicleColourTernary:
@@ -110,6 +113,10 @@ GameActions::Result RideSetAppearanceAction::Execute() const
             break;
         case RideSetAppearanceType::TrackColourSupports:
             ride->track_colour[_index].supports = _value;
+            GfxInvalidateScreen();
+            break;
+        case RideSetAppearanceType::MazeStyle:
+            ride->subtype = _value;
             GfxInvalidateScreen();
             break;
         case RideSetAppearanceType::VehicleColourBody:
