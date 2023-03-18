@@ -5029,11 +5029,12 @@ void Ride::UpdateMaxVehicles()
     }
     else
     {
-        max_trains = rideEntry->cars_per_flat_ride;
+        auto carsPerFlatRide = GetCarsPerFlatride();
+        max_trains = carsPerFlatRide;
         MinCarsPerTrain = rideEntry->min_cars_in_train;
         MaxCarsPerTrain = rideEntry->max_cars_in_train;
         numCarsPerTrain = rideEntry->max_cars_in_train;
-        maxNumTrains = rideEntry->cars_per_flat_ride;
+        maxNumTrains = carsPerFlatRide;
     }
 
     if (gCheatsDisableTrainLengthLimit)
@@ -5852,4 +5853,29 @@ ResultWithMessage Ride::ChangeStatusCreateVehicles(bool isApplying, const Coords
     }
 
     return { true };
+}
+
+uint8_t Ride::GetCarsPerFlatride() const
+{
+    auto* rideEntry = GetRideEntry();
+    if (rideEntry == nullptr)
+        return NoFlatRideCars;
+
+    auto carsPerFlatRide = rideEntry->cars_per_flat_ride;
+    if (carsPerFlatRide == NoFlatRideCars)
+        return NoFlatRideCars;
+
+    auto* originElement = GetOriginElement(StationIndex(0));
+    if (originElement == nullptr)
+        return carsPerFlatRide;
+
+    auto originElementType = originElement->GetTrackType();
+    auto defaultTrackType = GetRideTypeDescriptor().StartTrackPiece;
+    if (originElementType == defaultTrackType)
+        return carsPerFlatRide;
+
+    auto originElementTypeSize = GetTrackElementDescriptor(originElementType).GetNumSequences();
+    auto defaultTypeSize = GetTrackElementDescriptor(defaultTrackType).GetNumSequences();
+
+    return carsPerFlatRide * originElementTypeSize / defaultTypeSize;
 }

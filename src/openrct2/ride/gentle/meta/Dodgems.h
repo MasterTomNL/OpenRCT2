@@ -23,7 +23,7 @@ constexpr const RideTypeDescriptor DodgemsRTD =
     SET_FIELD(EnabledTrackPieces, { TRACK_FLAT_BASE_4_X_4, TRACK_FLAT_BASE_2_X_4 }),
     SET_FIELD(ExtraTrackPieces, {}),
     SET_FIELD(CoveredTrackPieces, {}),
-    SET_FIELD(StartTrackPiece, TrackElemType::FlatTrack2x4),
+    SET_FIELD(StartTrackPiece, TrackElemType::FlatTrack4x4),
     SET_FIELD(TrackPaintFunction, GetTrackPaintFunctionDodgems),
     SET_FIELD(Flags, RIDE_TYPE_FLAGS_TRACK_HAS_3_COLOURS | RIDE_TYPE_FLAG_HAS_SINGLE_PIECE_STATION | RIDE_TYPE_FLAG_CANNOT_HAVE_GAPS |
                      RIDE_TYPE_FLAG_NO_TEST_MODE | RIDE_TYPE_FLAG_HAS_NO_TRACK | RIDE_TYPE_FLAG_TRACK_NO_WALLS | RIDE_TYPE_FLAG_FLAT_RIDE |

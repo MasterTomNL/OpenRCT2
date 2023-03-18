@@ -406,6 +406,8 @@ public:
     bool HasStation() const;
 
     bool FindTrackGap(const CoordsXYE& input, CoordsXYE* output) const;
+
+    uint8_t GetCarsPerFlatride() const;
 };
 void UpdateSpiralSlide(Ride& ride);
 void UpdateChairlift(Ride& ride);
