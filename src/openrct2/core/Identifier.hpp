@@ -19,7 +19,7 @@ template<typename T, T TNullValue, typename TTag> class TIdentifier
         Null = TNullValue,
     } _handle;
 
-private:
+public:
     explicit constexpr TIdentifier(const T index)
         : _handle{ static_cast<ValueType>(index) }
     {
@@ -30,7 +30,6 @@ private:
     {
     }
 
-public:
     using UnderlyingType = T;
 
     constexpr TIdentifier() = default;
