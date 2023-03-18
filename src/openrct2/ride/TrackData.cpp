@@ -2546,7 +2546,7 @@ static constexpr const PreviewTrack TrackBlocksFlatTrack2x4[] = {
     { 4, 32, 0, 0, 0, { 0b1111, 0 }, 0 },
     { 5, 32, 32, 0, 0, { 0b1111, 0 }, 0 },
     { 6, 32, 64, 0, 0, { 0b1111, 0 }, 0 },
-    { 7, 32, 96, 0, 0, { 0b1111, 0 }, RCT_PREVIEW_TRACK_FLAG_1 },
+    { 7, 32, 96, 0, 0, { 0b1111, 0 }, 0 },
     TRACK_BLOCK_END
 };
 
