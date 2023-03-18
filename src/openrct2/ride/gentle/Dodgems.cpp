@@ -101,7 +101,7 @@ static void PaintDodgems_4x4(
     PaintUtilSetGeneralSupportHeight(session, height + 48, 0x20);
 }
 
-static void paint_dodgems_2x4(
+static void PaintDodgems_2x4(
     PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
     const TrackElement& trackElement)
 {
