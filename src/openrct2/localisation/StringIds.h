@@ -3945,6 +3945,17 @@ enum : uint16_t
     STR_RCT1_INTEREST_TIP = 6546,
     STR_ALL_SCENERY = 6547,
 
+    STR_FLAT_RIDE_BASE_1_X_4A = 6548,
+    STR_FLAT_RIDE_BASE_2_X_2 = 6549,
+    STR_FLAT_RIDE_BASE_4_X_4 = 6550,
+    STR_FLAT_RIDE_BASE_2_X_4 = 6551,
+    STR_FLAT_RIDE_BASE_1_X_5 = 6552,
+    STR_FLAT_RIDE_BASE_1_X_1A = 6553,
+    STR_FLAT_RIDE_BASE_1_X_4B = 6554,
+    STR_FLAT_RIDE_BASE_1_X_1B = 6555,
+    STR_FLAT_RIDE_BASE_1_X_4C = 6556,
+    STR_FLAT_RIDE_BASE_3_X_3 = 6557,
+
     // Have to include resource strings (from scenarios and objects) for the time being now that language is partially working
     /* MAX_STR_COUNT = 32768 */ // MAX_STR_COUNT - upper limit for number of strings, not the current count strings
 };

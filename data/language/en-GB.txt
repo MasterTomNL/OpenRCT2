@@ -3649,6 +3649,16 @@ STR_6544    :Loan cannot be negative!
 STR_6545    :Use RCT1 interest calculation
 STR_6546    :Use the interest calculation algorithm of RollerCoaster Tycoon 1, which used a fixed percentage of approximately 1.33%.
 STR_6547    :All Scenery
+STR_6548    :Flat ride base, 1 x 4
+STR_6549    :Flat ride base, 2 × 2
+STR_6550    :Flat ride base, 4 × 4
+STR_6551    :Flat ride base, 2 × 4
+STR_6552    :Flat ride base, 1 × 5 
+STR_6553    :Flat base, 1 × 1
+STR_6554    :Flat ride base, 1 × 4
+STR_6555    :Flat base, 1 × 1
+STR_6556    :Flat ride base, 1 × 4
+STR_6557    :Flat ride base, 3 × 3 
 
 #############
 # Scenarios #
