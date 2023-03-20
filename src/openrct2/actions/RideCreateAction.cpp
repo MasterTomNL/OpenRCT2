@@ -162,7 +162,7 @@ GameActions::Result RideCreateAction::Execute() const
         }
         else
         {
-            ride->ProposedNumTrains = rideEntry->cars_per_flat_ride;
+            ride->ProposedNumTrains = ride->GetCarsPerFlatride();
         }
     }
     else
