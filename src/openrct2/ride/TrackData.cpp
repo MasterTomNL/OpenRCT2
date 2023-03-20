@@ -7209,3 +7209,19 @@ const PreviewTrack* TrackElementDescriptor::GetBlockForSequence(uint8_t sequence
 
     return trackBlock;
 }
+
+uint8_t TrackElementDescriptor::GetNumSequences() const
+{
+    const auto* trackBlock = Block;
+    if (trackBlock == nullptr)
+        return 0;
+
+    auto numBlocks = 0;
+    while (trackBlock != nullptr && trackBlock->index != 255)
+    {
+        trackBlock++;
+        numBlocks++;
+    }
+
+    return numBlocks;
+}

@@ -106,6 +106,7 @@ struct TrackElementDescriptor
      * @return The track block, or nullptr if it doesn’t exist.
      */
     const PreviewTrack* GetBlockForSequence(uint8_t sequenceIndex) const;
+    uint8_t GetNumSequences() const;
 };
 
 namespace OpenRCT2
