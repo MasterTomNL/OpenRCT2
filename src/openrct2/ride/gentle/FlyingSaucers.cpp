@@ -34,14 +34,10 @@ static constexpr const uint32_t FlyingSaucersFenceSprites[] = {
 /**
  * rct2: 0x008873D8
  */
-static void PaintFlyingSaucers(
+inline void PaintFlyingSaucers(
     PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
-    const TrackElement& trackElement)
+    const TrackElement& trackElement, uint8_t edges)
 {
-    uint8_t relativeTrackSequence = track_map_4x4[direction][trackSequence];
-
-    int32_t edges = edges_4x4[relativeTrackSequence];
-
     WoodenASupportsPaintSetup(session, direction & 1, 0, height, session.TrackColours[SCHEME_MISC]);
 
     const StationObject* stationObject = ride.GetStationObject();
@@ -60,15 +56,39 @@ static void PaintFlyingSaucers(
     PaintUtilSetGeneralSupportHeight(session, height + 48, 0x20);
 }
 
+static void PaintFlyingSaucers_4x4(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement)
+{
+    uint8_t relativeTrackSequence = track_map_4x4[direction][trackSequence];
+    int32_t edges = edges_4x4[relativeTrackSequence];
+
+    PaintFlyingSaucers(session, ride, trackSequence, direction, height, trackElement, edges);
+}
+
+static void PaintFlyingSaucers_2x4(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement)
+{
+    int32_t edges = edges_2x4[direction][trackSequence];
+
+    PaintFlyingSaucers(session, ride, trackSequence, direction, height, trackElement, edges);
+}
+
 /**
  * rct2: 0x00887208
  */
 TRACK_PAINT_FUNCTION GetTrackPaintFunctionFlyingSaucers(int32_t trackType)
 {
-    if (trackType != TrackElemType::FlatTrack4x4)
+    if (trackType == TrackElemType::FlatTrack4x4)
     {
-        return nullptr;
+        return PaintFlyingSaucers_4x4;
     }
 
-    return PaintFlyingSaucers;
+    if (trackType == TrackElemType::FlatTrack2x4)
+    {
+        return PaintFlyingSaucers_2x4;
+    }
+
+    return nullptr;
 }

@@ -7,6 +7,7 @@
  * OpenRCT2 is licensed under the GNU General Public License version 3.
  *****************************************************************************/
 
+#include "../../core/Numerics.hpp"
 #include "../../interface/Viewport.h"
 #include "../../object/StationObject.h"
 #include "../../paint/Paint.h"
@@ -43,14 +44,11 @@ static void PaintDodgemsRoof(PaintSession& session, int32_t height, int32_t offs
     PaintAttachToPreviousPS(session, imageId, 0, 0);
 }
 
-static void PaintDodgems(
+template<uint8_t numSequences>
+inline void PaintDodgems(
     PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
-    const TrackElement& trackElement)
+    const TrackElement& trackElement, uint8_t edges)
 {
-    uint8_t relativeTrackSequence = track_map_4x4[direction][trackSequence];
-
-    int32_t edges = edges_4x4[relativeTrackSequence];
-
     WoodenASupportsPaintSetup(session, direction & 1, 0, height, session.TrackColours[SCHEME_MISC]);
 
     const StationObject* stationObject = ride.GetStationObject();
@@ -67,7 +65,7 @@ static void PaintDodgems(
         switch (direction)
         {
             case 2:
-                trackSequence = 15 - trackSequence;
+                trackSequence = numSequences - 1 - trackSequence;
                 [[fallthrough]];
             case 0:
                 if ((trackSequence / 4) & 1)
@@ -81,7 +79,7 @@ static void PaintDodgems(
                 break;
 
             case 3:
-                trackSequence = 15 - trackSequence;
+                trackSequence = numSequences - 1 - trackSequence;
                 [[fallthrough]];
             case 1:
                 if ((trackSequence / 4) & 1)
@@ -100,15 +98,40 @@ static void PaintDodgems(
     PaintUtilSetGeneralSupportHeight(session, height + 48, 0x20);
 }
 
+static void PaintDodgems_4x4(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement)
+{
+    uint8_t relativeTrackSequence = track_map_4x4[direction][trackSequence];
+
+    int32_t edges = edges_4x4[relativeTrackSequence];
+
+    PaintDodgems<16>(session, ride, trackSequence, direction, height, trackElement, edges);
+}
+
+static void PaintDodgems_2x4(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement)
+{
+    auto edges = edges_2x4[direction][trackSequence];
+
+    PaintDodgems<8>(session, ride, trackSequence, direction, height, trackElement, edges);
+}
+
 /**
  * rct2:
  */
 TRACK_PAINT_FUNCTION GetTrackPaintFunctionDodgems(int32_t trackType)
 {
-    if (trackType != TrackElemType::FlatTrack4x4)
+    if (trackType == TrackElemType::FlatTrack4x4)
     {
-        return nullptr;
+        return PaintDodgems_4x4;
     }
 
-    return PaintDodgems;
+    if (trackType == TrackElemType::FlatTrack2x4)
+    {
+        return PaintDodgems_2x4;
+    }
+
+    return nullptr;
 }
