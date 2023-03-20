@@ -25,6 +25,8 @@ extern const uint8_t edges_3x3[];
 extern const uint8_t track_map_4x4[][16];
 extern const uint8_t edges_4x4[];
 
+extern const uint8_t edges_2x4[NumOrthogonalDirections][8];
+
 extern const uint8_t track_map_1x4[][4];
 
 enum

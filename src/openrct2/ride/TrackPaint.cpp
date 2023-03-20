@@ -110,6 +110,49 @@ const uint8_t edges_4x4[] = {
 };
 // clang-format on
 
+const uint8_t edges_2x4[NumOrthogonalDirections][8] = {
+    {
+        EDGE_NE | EDGE_NW,
+        EDGE_NE,
+        EDGE_NE,
+        EDGE_NE | EDGE_SE,
+        EDGE_NW | EDGE_SW,
+        EDGE_SW,
+        EDGE_SW,
+        EDGE_SW | EDGE_SE,
+    },
+    {
+        EDGE_SE | EDGE_NE,
+        EDGE_SE,
+        EDGE_SE,
+        EDGE_SE | EDGE_SW,
+        EDGE_NW | EDGE_NE,
+        EDGE_NW,
+        EDGE_NW,
+        EDGE_NW | EDGE_SW,
+    },
+    {
+        EDGE_SW | EDGE_SE,
+        EDGE_SW,
+        EDGE_SW,
+        EDGE_SW | EDGE_NW,
+        EDGE_SE | EDGE_NE,
+        EDGE_NE,
+        EDGE_NE,
+        EDGE_NE | EDGE_NW,
+    },
+    {
+        EDGE_NW | EDGE_SW,
+        EDGE_NW,
+        EDGE_NW,
+        EDGE_NW | EDGE_NE,
+        EDGE_SE | EDGE_SW,
+        EDGE_SE,
+        EDGE_SE,
+        EDGE_SE | EDGE_NE,
+    },
+};
+
 const uint8_t track_map_1x4[][4] = {
     { 0, 1, 2, 3 },
     { 2, 3, 0, 1 },
