@@ -19,7 +19,7 @@ constexpr const RideTypeDescriptor TopSpinRTD =
 {
     SET_FIELD(AlternateType, RIDE_TYPE_NULL),
     SET_FIELD(Category, RIDE_CATEGORY_THRILL),
-    SET_FIELD(EnabledTrackPieces, {}),
+    SET_FIELD(EnabledTrackPieces, { TRACK_FLAT_BASE_3_X_3 }),
     SET_FIELD(ExtraTrackPieces, {}),
     SET_FIELD(CoveredTrackPieces, {}),
     SET_FIELD(StartTrackPiece, TrackElemType::FlatTrack3x3),
