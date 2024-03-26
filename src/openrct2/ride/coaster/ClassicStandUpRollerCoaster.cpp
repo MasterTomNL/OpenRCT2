@@ -278,6 +278,11 @@ static void classicStandUpRCTrackBankedRightQuarterTurn5(
                         { 0, 0, height }, { 32, 16, 3 });
                     break;
             }
+
+            MetalASupportsPaintSetupRotated(
+                session, MetalSupportType::Tubes, MetalSupportPlace::BottomRightSide, direction, 0, height,
+                session.SupportColours);
+
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
@@ -348,6 +353,11 @@ static void classicStandUpRCTrackBankedRightQuarterTurn5(
                         { 16, 0, height }, { 16, 32, 3 });
                     break;
             }
+
+            MetalASupportsPaintSetupRotated(
+                session, MetalSupportType::Tubes, MetalSupportPlace::BottomLeftSide, direction, 0, height,
+                session.SupportColours);
+
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
