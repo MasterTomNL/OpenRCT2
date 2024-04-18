@@ -83,7 +83,7 @@ void MusicObject::Unload()
     UnloadImages();
 
     _hasPreview = false;
-    _previewImageId = 0;
+    _previewImageId = ImageIndexUndefined;
     NameStringId = 0;
 }
 
