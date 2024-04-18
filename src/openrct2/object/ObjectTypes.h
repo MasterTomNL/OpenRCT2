@@ -39,13 +39,14 @@ enum class ObjectType : uint8_t
     FootpathSurface,
     FootpathRailings,
     Audio,
+    Image,
 
     Count,
     None = 255
 };
 
 static constexpr size_t kNumTransientObjectTypes = 16;
-static constexpr size_t kNumIntransientObjectTypes = 2;
+static constexpr size_t kNumIntransientObjectTypes = 3;
 
 bool ObjectTypeIsTransient(ObjectType type);
 bool ObjectTypeIsIntransient(ObjectType type);

@@ -787,7 +787,10 @@ void LoadPalette()
 
     if (water_type != nullptr)
     {
-        Guard::Assert(water_type->image_id != 0xFFFFFFFF, "Failed to load water palette");
+        // Guard::Assert(water_type->image_id != ImageIndexUndefined, "Failed to load water palette");
+        if (water_type->image_id == ImageIndexUndefined)
+            LOG_ERROR("Failed to load water palette");
+
         palette = water_type->image_id;
     }
 

@@ -73,7 +73,7 @@ void MusicObject::Load()
         }
     }
 
-    _hasPreview = !!GetImageTable().GetCount();
+    _hasPreview = !!GetNumImages();
     _previewImageId = LoadImages();
 }
 

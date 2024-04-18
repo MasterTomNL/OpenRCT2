@@ -98,7 +98,7 @@ ObjectEntryIndex LandTool::GetSurfaceStyleFromDropdownIndex(size_t index)
     {
         const auto surfaceObj = static_cast<TerrainSurfaceObject*>(objManager.GetLoadedObject(ObjectType::TerrainSurface, i));
         // If fallback images are loaded, the RCT1 styles will just look like copies of already existing styles, so hide them.
-        if (surfaceObj != nullptr && !surfaceObj->UsesFallbackImages())
+        if (surfaceObj != nullptr /* && !surfaceObj->UsesFallbackImages()*/)
         {
             if (itemIndex == index)
             {
@@ -149,7 +149,7 @@ ObjectEntryIndex LandTool::GetEdgeStyleFromDropdownIndex(size_t index)
     {
         const auto edgeObj = static_cast<TerrainEdgeObject*>(objManager.GetLoadedObject(ObjectType::TerrainEdge, i));
         // If fallback images are loaded, the RCT1 styles will just look like copies of already existing styles, so hide them.
-        if (edgeObj != nullptr && !edgeObj->UsesFallbackImages())
+        if (edgeObj != nullptr /* && !edgeObj->UsesFallbackImages()*/)
         {
             if (itemIndex == index)
             {

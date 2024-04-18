@@ -33,6 +33,7 @@ constexpr std::array kAllObjectTypes = {
     ObjectType::FootpathSurface,
     ObjectType::FootpathRailings,
     ObjectType::Audio,
+    ObjectType::Image,
 };
 
 static_assert(kAllObjectTypes.size() == EnumValue(ObjectType::Count));
@@ -49,6 +50,7 @@ static constexpr std::array<const ObjectType, kNumTransientObjectTypes> kTransie
 static constexpr std::array<const ObjectType, kNumIntransientObjectTypes> kIntransientObjectTypes = {
     ObjectType::ScenarioText,
     ObjectType::Audio,
+    ObjectType::Image,
 };
 
 static_assert(kNumTransientObjectTypes + kNumIntransientObjectTypes == static_cast<size_t>(ObjectType::Count));

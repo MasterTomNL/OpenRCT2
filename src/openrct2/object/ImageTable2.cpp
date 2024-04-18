@@ -31,7 +31,7 @@ namespace OpenRCT2
     {
     public:
         virtual ~ImageSource() = default;
-        virtual std::optional<size_t> LoadImage(const ImageTable2::Entry& entry, rct_g1_element& element, size_t index) = 0;
+        virtual std::optional<size_t> LoadImage(const ImageTable2::Entry& entry, G1Element& element, size_t index) = 0;
     };
 } // namespace OpenRCT2
 
@@ -133,13 +133,13 @@ void ImageTable2::LoadFrom(const ImageTable2& table, size_t sourceStartIndex, si
 
 ImageIndex ImageTable2::Load()
 {
-    std::vector<rct_g1_element> images;
+    std::vector<G1Element> images;
     images.resize(_entries.size());
     for (size_t i = 0; i < _entries.size(); i++)
     {
         LoadImage(images, i);
     }
-    _baseIndex = gfx_object_allocate_images(images.data(), static_cast<uint32_t>(images.size()));
+    _baseIndex = GfxObjectAllocateImages(images.data(), static_cast<uint32_t>(images.size()));
     if (_baseIndex != ImageIndexUndefined)
     {
         _loadedImageCount = images.size();
@@ -153,11 +153,11 @@ void ImageTable2::Unload()
     {
         for (size_t i = 0; i < _loadedImageCount; i++)
         {
-            auto el = const_cast<rct_g1_element*>(gfx_get_g1_element(static_cast<ImageIndex>(_baseIndex + i)));
+            auto el = const_cast<G1Element*>(GfxGetG1Element(static_cast<ImageIndex>(_baseIndex + i)));
             delete[] el->offset;
             el->offset = nullptr;
         }
-        gfx_object_free_images(_baseIndex, static_cast<uint32_t>(_loadedImageCount));
+        GfxObjectFreeImages(_baseIndex, static_cast<uint32_t>(_loadedImageCount));
         _baseIndex = ImageIndexUndefined;
         _loadedImageCount = 0;
     }
@@ -177,7 +177,7 @@ ImageIndex ImageTable2::GetImage(uint32_t index) const
     return ImageIndexUndefined;
 }
 
-void ImageTable2::LoadImage(std::vector<rct_g1_element>& elements, size_t index)
+void ImageTable2::LoadImage(std::vector<G1Element>& elements, size_t index)
 {
     auto& entry = _entries.at(index);
     auto source = GetOrLoadSource(entry);
@@ -212,7 +212,7 @@ public:
     {
     }
 
-    std::optional<size_t> LoadImage(const ImageTable2::Entry& entry, rct_g1_element& element, size_t index) override
+    std::optional<size_t> LoadImage(const ImageTable2::Entry& entry, G1Element& element, size_t index) override
     {
         element = _gx.GetImageCopy(index);
         return _gx.GetNextZoomImage(index);
@@ -231,7 +231,7 @@ public:
         _object = ObjectFactory::CreateObjectFromLegacyFile(objRepository, asset.GetPath().c_str(), true);
     }
 
-    std::optional<size_t> LoadImage(const ImageTable2::Entry& entry, rct_g1_element& element, size_t index) override
+    std::optional<size_t> LoadImage(const ImageTable2::Entry& entry, G1Element& element, size_t index) override
     {
         const auto& obj = *_object.get();
         auto& gx = obj.GetEmbeddedImages();
@@ -252,10 +252,11 @@ public:
         _image = Imaging::ReadFromBuffer(buffer, IMAGE_FORMAT::PNG_32);
     }
 
-    std::optional<size_t> LoadImage(const ImageTable2::Entry& entry, rct_g1_element& element, size_t index) override
+    std::optional<size_t> LoadImage(const ImageTable2::Entry& entry, G1Element& element, size_t index) override
     {
+        auto meta = OpenRCT2::Drawing::ImageImportMeta{ ScreenCoordsXY{ entry.X, entry.Y } };
         ImageImporter imageImporter;
-        auto result = imageImporter.Import(_image, entry.X, entry.Y);
+        auto result = imageImporter.Import(_image, meta);
 
         element = result.Element;
         element.offset = new uint8_t[result.Buffer.size()];

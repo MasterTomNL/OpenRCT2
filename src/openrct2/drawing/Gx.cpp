@@ -25,7 +25,7 @@ GxFile::GxFile(IStream& stream)
     _elements.resize(numImages);
     for (size_t i = 0; i < numImages; i++)
     {
-        auto src = stream.ReadValue<rct_g1_element_32bit>();
+        auto src = stream.ReadValue<RCTG1Element>();
         auto& dst = _elements[i];
         dst.offset = reinterpret_cast<uint8_t*>(static_cast<uintptr_t>(src.offset));
         dst.width = src.width;
@@ -54,18 +54,18 @@ size_t GxFile::GetCount() const
     return _elements.size();
 }
 
-static rct_g1_element DuplicateImageData(const rct_g1_element& src)
+static G1Element DuplicateImageData(const G1Element& src)
 {
-    rct_g1_element dst = src;
-    auto size = g1_calculate_data_size(&src);
+    G1Element dst = src;
+    auto size = G1CalculateDataSize(&src);
     dst.offset = new uint8_t[size];
     std::memcpy(dst.offset, src.offset, size);
     return dst;
 }
 
-const rct_g1_element* GxFile::GetImage(size_t i) const
+const G1Element* GxFile::GetImage(size_t i) const
 {
-    const rct_g1_element* result{};
+    const G1Element* result{};
     if (i < _elements.size())
     {
         result = &_elements[i];
@@ -73,9 +73,9 @@ const rct_g1_element* GxFile::GetImage(size_t i) const
     return result;
 }
 
-rct_g1_element GxFile::GetImageCopy(size_t i) const
+G1Element GxFile::GetImageCopy(size_t i) const
 {
-    rct_g1_element result{};
+    G1Element result{};
     if (i < _elements.size())
     {
         result = DuplicateImageData(_elements[i]);
@@ -99,14 +99,14 @@ GxStream::GxStream(std::unique_ptr<IStream> stream)
     _count = _stream->ReadValue<uint32_t>();
     _dataSize = _stream->ReadValue<uint32_t>();
     _elementStart = _stream->GetPosition();
-    _dataStart = _elementStart + (_count * sizeof(rct_g1_element_32bit));
+    _dataStart = _elementStart + (_count * sizeof(RCTG1Element));
 }
 
 GxStream::GxStream(std::unique_ptr<IStream> streamElements, std::unique_ptr<IStream> streamData)
     : _streamElements(std::move(streamElements))
     , _streamData(std::move(streamData))
 {
-    _count = _streamElements->GetLength() / sizeof(rct_g1_element_32bit);
+    _count = _streamElements->GetLength() / sizeof(RCTG1Element);
     _dataSize = _streamData->GetLength();
 }
 
@@ -115,14 +115,14 @@ size_t GxStream::GetCount() const
     return _count;
 }
 
-const rct_g1_element* GxStream::GetImage(size_t i) const
+const G1Element* GxStream::GetImage(size_t i) const
 {
     throw std::runtime_error("Invalid operation");
 }
 
-rct_g1_element GxStream::GetImageCopy(size_t i) const
+G1Element GxStream::GetImageCopy(size_t i) const
 {
-    rct_g1_element result{};
+    G1Element result{};
     if (i < _count)
     {
         // Read two elements
@@ -170,11 +170,11 @@ std::optional<size_t> GxStream::GetNextZoomImage(size_t i) const
     return {};
 }
 
-rct_g1_element_32bit GxStream::ReadElement(size_t i)
+RCTG1Element GxStream::ReadElement(size_t i)
 {
     auto stream = _stream != nullptr ? _stream.get() : _streamElements.get();
-    stream->SetPosition(_elementStart + (i * sizeof(rct_g1_element_32bit)));
-    return stream->ReadValue<rct_g1_element_32bit>();
+    stream->SetPosition(_elementStart + (i * sizeof(RCTG1Element)));
+    return stream->ReadValue<RCTG1Element>();
 }
 
 std::unique_ptr<uint8_t[]> GxStream::ReadData(size_t offset, size_t len)

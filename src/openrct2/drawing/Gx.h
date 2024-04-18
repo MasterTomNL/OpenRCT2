@@ -23,15 +23,15 @@ namespace OpenRCT2
         virtual ~Gx() = default;
 
         virtual size_t GetCount() const = 0;
-        virtual const rct_g1_element* GetImage(size_t i) const = 0;
-        virtual rct_g1_element GetImageCopy(size_t i) const = 0;
+        virtual const G1Element* GetImage(size_t i) const = 0;
+        virtual G1Element GetImageCopy(size_t i) const = 0;
         virtual std::optional<size_t> GetNextZoomImage(size_t i) const = 0;
     };
 
     class GxFile final : public Gx
     {
     private:
-        std::vector<rct_g1_element> _elements;
+        std::vector<G1Element> _elements;
         std::vector<uint8_t> _data;
 
     public:
@@ -39,8 +39,8 @@ namespace OpenRCT2
         GxFile(IStream& stream);
 
         size_t GetCount() const override;
-        const rct_g1_element* GetImage(size_t i) const override;
-        rct_g1_element GetImageCopy(size_t i) const override;
+        const G1Element* GetImage(size_t i) const override;
+        G1Element GetImageCopy(size_t i) const override;
         std::optional<size_t> GetNextZoomImage(size_t i) const override;
     };
 
@@ -57,19 +57,19 @@ namespace OpenRCT2
         uint32_t _dataSize{};
 
         std::optional<uint32_t> _cachedIndex{};
-        rct_g1_element_32bit _cachedElement{};
+        RCTG1Element _cachedElement{};
 
     public:
         GxStream(std::unique_ptr<IStream> stream);
         GxStream(std::unique_ptr<IStream> streamElements, std::unique_ptr<IStream> streamData);
 
         size_t GetCount() const override;
-        const rct_g1_element* GetImage(size_t i) const override;
-        rct_g1_element GetImageCopy(size_t i) const override;
+        const G1Element* GetImage(size_t i) const override;
+        G1Element GetImageCopy(size_t i) const override;
         std::optional<size_t> GetNextZoomImage(size_t i) const override;
 
     private:
-        rct_g1_element_32bit ReadElement(size_t i);
+        RCTG1Element ReadElement(size_t i);
         std::unique_ptr<uint8_t[]> ReadData(size_t offset, size_t len);
     };
 } // namespace OpenRCT2

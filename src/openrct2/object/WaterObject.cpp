@@ -15,6 +15,7 @@
 #include "../common.h"
 #include "../core/IStream.hpp"
 #include "../core/Json.hpp"
+#include "../drawing/Image.h"
 #include "../localisation/Formatter.h"
 #include "../localisation/Language.h"
 #include "../localisation/StringIds.h"
@@ -51,8 +52,8 @@ void WaterObject::Load()
 {
     GetStringTable().Sort();
     _legacyType.string_idx = LanguageAllocateObjectString(GetName());
-    _legacyType.image_id = LoadImages();
-    //_legacyType.image_id = gfx_object_allocate_images(_palettes.data(), static_cast<uint32_t>(_palettes.size()));
+    //    _legacyType.image_id = LoadImages();
+    _legacyType.image_id = GfxObjectAllocateImages(_palettes.data(), static_cast<uint32_t>(_palettes.size()));
     _legacyType.palette_index_1 = _legacyType.image_id + 1;
     _legacyType.palette_index_2 = _legacyType.image_id + 4;
 
@@ -61,8 +62,8 @@ void WaterObject::Load()
 
 void WaterObject::Unload()
 {
-    //     gfx_object_free_images(_legacyType.image_id, static_cast<uint32_t>(_palettes.size()));
-    UnloadImages();
+    GfxObjectFreeImages(_legacyType.image_id, static_cast<uint32_t>(_palettes.size()));
+    // UnloadImages();
     LanguageFreeObjectString(_legacyType.string_idx);
 
     _legacyType.string_idx = 0;
@@ -136,10 +137,10 @@ void WaterObject::ReadJsonPalette(json_t& jPalette)
         dataIndex += 3;
     }
 
-    //     auto& g1 = _palettes.emplace_back();
-    //     g1.offset = data;
-    G1Element g1 = {};
-    g1.offset = data.get();
+    auto& g1 = _palettes.emplace_back();
+    g1.offset = data;
+    //    G1Element g1 = {};
+    //    g1.offset = data.get();
     g1.width = static_cast<int16_t>(numColours);
     g1.x_offset = Json::GetNumber<int16_t>(jPalette["index"]);
     g1.flags = G1_FLAG_PALETTE;

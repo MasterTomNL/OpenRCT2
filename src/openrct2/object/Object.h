@@ -341,9 +341,6 @@ public:
     {
         return _baseImageId;
     }
-
-    uint32_t LoadImages();
-    void UnloadImages();
 };
 #ifdef __WARN_SUGGEST_FINAL_TYPES__
 #    pragma GCC diagnostic pop

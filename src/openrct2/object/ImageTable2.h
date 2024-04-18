@@ -17,7 +17,7 @@
 #include <optional>
 
 struct IReadObjectContext;
-struct rct_g1_element;
+struct G1Element;
 
 namespace OpenRCT2
 {
@@ -71,7 +71,7 @@ namespace OpenRCT2
 
         size_t GetCount() const;
         ImageIndex GetImage(uint32_t index) const;
-        void LoadImage(std::vector<rct_g1_element>& elements, size_t index);
+        void LoadImage(std::vector<G1Element>& elements, size_t index);
 
     private:
         static void ReadImageInfoFromJson(IReadObjectContext& context, const json_t& jImage, Entry& entry);

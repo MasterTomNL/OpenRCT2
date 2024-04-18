@@ -263,23 +263,23 @@ std::string Object::GetName(int32_t language) const
     return GetString(language, ObjectStringID::NAME);
 }
 
-ImageIndex Object::LoadImages()
-{
-    if (_baseImageId == ImageIndexUndefined)
-    {
-        _baseImageId = GfxObjectAllocateImages(GetImageTable().GetImages(), GetImageTable().GetCount());
-    }
-    return _baseImageId;
-}
-
-void Object::UnloadImages()
-{
-    if (_baseImageId != ImageIndexUndefined)
-    {
-        GfxObjectFreeImages(_baseImageId, GetImageTable().GetCount());
-        _baseImageId = ImageIndexUndefined;
-    }
-}
+// ImageIndex Object::LoadImages()
+//{
+//     if (_baseImageId == ImageIndexUndefined)
+//     {
+//         _baseImageId = GfxObjectAllocateImages(GetImageTable().GetImages(), GetImageTable().GetCount());
+//     }
+//     return _baseImageId;
+// }
+//
+// void Object::UnloadImages()
+//{
+//     if (_baseImageId != ImageIndexUndefined)
+//     {
+//         GfxObjectFreeImages(_baseImageId, GetImageTable().GetCount());
+//         _baseImageId = ImageIndexUndefined;
+//     }
+// }
 
 void RCTObjectEntry::SetName(std::string_view value)
 {
