@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "MiniAudio.h"
+
 #include <memory>
 #include <openrct2/audio/AudioChannel.h>
 #include <openrct2/audio/AudioSource.h>
@@ -16,7 +18,7 @@
 #include <string>
 
 struct SDL_RWops;
-using SpeexResamplerState = struct SpeexResamplerState_;
+using ResamplerState = ma_resampler;
 
 namespace OpenRCT2::Audio
 {
@@ -26,8 +28,8 @@ namespace OpenRCT2::Audio
     struct ISDLAudioChannel : public IAudioChannel
     {
         [[nodiscard]] virtual AudioFormat GetFormat() const abstract;
-        [[nodiscard]] virtual SpeexResamplerState* GetResampler() const abstract;
-        virtual void SetResampler(SpeexResamplerState* value) abstract;
+        [[nodiscard]] virtual ResamplerState* GetResampler() const abstract;
+        virtual void SetResampler(ResamplerState* value) abstract;
     };
 
     namespace AudioChannel

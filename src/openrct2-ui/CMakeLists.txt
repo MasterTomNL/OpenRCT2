@@ -12,7 +12,6 @@ option(DISABLE_OPENGL   "Disable OpenGL support.")
 # Third party libraries
 if (MSVC)
     find_package(SDL2 REQUIRED)
-    find_library(SPEEX_LDFLAGS libspeexdsp)
     if (NOT DISABLE_FLAC)
         find_library(SPEEX_LDFLAGS libflac)
     endif ()
@@ -22,7 +21,6 @@ if (MSVC)
     endif ()
 else ()
     PKG_CHECK_MODULES(SDL2 REQUIRED IMPORTED_TARGET sdl2)
-    PKG_CHECK_MODULES(SPEEX REQUIRED IMPORTED_TARGET speexdsp)
     if (NOT DISABLE_FLAC)
         PKG_CHECK_MODULES(FLAC REQUIRED IMPORTED_TARGET flac)
     endif ()
@@ -62,8 +60,7 @@ ipo_set_target_properties(${PROJECT_NAME})
 # mingw builds cannot use the PkgConfig imported targets
 if (NOT MSVC AND NOT WIN32)
     target_link_libraries(${PROJECT_NAME} "libopenrct2"
-                                    PkgConfig::SDL2
-                                    PkgConfig::SPEEX)
+                                    PkgConfig::SDL2)
 else ()
     target_link_libraries(${PROJECT_NAME} "libopenrct2"
                                     ${SDL2_LDFLAGS}
