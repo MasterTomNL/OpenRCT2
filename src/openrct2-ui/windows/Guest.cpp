@@ -170,362 +170,364 @@ namespace OpenRCT2::Ui::Windows
     static_assert(_guestWindowPageWidgets.size() == WINDOW_GUEST_PAGE_COUNT);
     // clang-format on
 
-    static constexpr std::array _guestWindowPageSizes = {
-        std::array{ ScreenSize{ 192, 159 }, ScreenSize{ 500, 450 } }, // WINDOW_GUEST_OVERVIEW
-        std::array{ ScreenSize{ 192, 180 }, ScreenSize{ 192, 180 } }, // WINDOW_GUEST_STATS
-        std::array{ ScreenSize{ 192, 180 }, ScreenSize{ 500, 400 } }, // WINDOW_GUEST_RIDES
-        std::array{ ScreenSize{ 210, 148 }, ScreenSize{ 210, 148 } }, // WINDOW_GUEST_FINANCE
-        std::array{ ScreenSize{ 192, 159 }, ScreenSize{ 500, 450 } }, // WINDOW_GUEST_THOUGHTS
-        std::array{ ScreenSize{ 192, 159 }, ScreenSize{ 500, 450 } }, // WINDOW_GUEST_INVENTORY
-        std::array{ ScreenSize{ 192, 171 }, ScreenSize{ 192, 171 } }, // WINDOW_GUEST_DEBUG
-    };
-    static_assert(_guestWindowPageSizes.size() == WINDOW_GUEST_PAGE_COUNT);
+// Minimum and maximum sizes, excluding the title bar.
+static constexpr std::array _guestWindowPageSizes = {
+    std::array{ ScreenSize{ 192, 145 }, ScreenSize{ 500, 436 } }, // WINDOW_GUEST_OVERVIEW
+    std::array{ ScreenSize{ 192, 166 }, ScreenSize{ 192, 166 } }, // WINDOW_GUEST_STATS
+    std::array{ ScreenSize{ 192, 166 }, ScreenSize{ 500, 386 } }, // WINDOW_GUEST_RIDES
+    std::array{ ScreenSize{ 210, 134 }, ScreenSize{ 210, 134 } }, // WINDOW_GUEST_FINANCE
+    std::array{ ScreenSize{ 192, 145 }, ScreenSize{ 500, 436 } }, // WINDOW_GUEST_THOUGHTS
+    std::array{ ScreenSize{ 192, 145 }, ScreenSize{ 500, 436 } }, // WINDOW_GUEST_INVENTORY
+    std::array{ ScreenSize{ 192, 157 }, ScreenSize{ 192, 157 } }, // WINDOW_GUEST_DEBUG
+};
+static_assert(_guestWindowPageSizes.size() == WINDOW_GUEST_PAGE_COUNT);
 
-    class GuestWindow final : public Window
+class GuestWindow final : public Window
+{
+private:
+    uint16_t _marqueePosition = 0;
+    uint16_t _beingWatchedTimer = 0;
+    uint16_t _guestAnimationFrame = 0;
+    int16_t _pickedPeepX = kLocationNull; // entity->x gets set to 0x8000 on pickup, this is the old value
+    std::vector<RideId> _riddenRides;
+
+public:
+    void OnOpen() override
     {
-    private:
-        uint16_t _marqueePosition = 0;
-        uint16_t _beingWatchedTimer = 0;
-        uint16_t _guestAnimationFrame = 0;
-        int16_t _pickedPeepX = kLocationNull; // entity->x gets set to 0x8000 on pickup, this is the old value
-        std::vector<RideId> _riddenRides;
+        widgets = _guestWindowWidgetsOverview;
+        page = WINDOW_GUEST_OVERVIEW;
+        frame_no = 0;
+        _marqueePosition = 0;
+        picked_peep_frame = 0;
+        min_width = width;
+        min_height = 157;
+        max_width = 500;
+        max_height = 450;
+        selected_list_item = -1;
+    }
 
-    public:
-        void OnOpen() override
-        {
-            widgets = _guestWindowWidgetsOverview;
-            page = WINDOW_GUEST_OVERVIEW;
-            frame_no = 0;
-            _marqueePosition = 0;
-            picked_peep_frame = 0;
-            min_width = width;
-            min_height = 157;
-            max_width = 500;
-            max_height = 450;
-            selected_list_item = -1;
-        }
+    void Init(EntityId id)
+    {
+        number = id.ToUnderlying();
+        page = -1; // Set Page to something invalid so that SetPage doesn't set audio on viewport
+        SetPage(WINDOW_GUEST_OVERVIEW);
+    }
 
-        void Init(EntityId id)
-        {
-            number = id.ToUnderlying();
-            page = -1; // Set Page to something invalid so that SetPage doesn't set audio on viewport
-            SetPage(WINDOW_GUEST_OVERVIEW);
-        }
-
-        void OnClose() override
-        {
+    void OnClose() override
+    {
             if (isToolActive(classification, number))
                 ToolCancel();
         }
 
-        void OnMouseUp(WidgetIndex widx) override
+    void OnMouseUp(WidgetIndex widx) override
+    {
+        switch (widx)
         {
-            switch (widx)
-            {
-                case WIDX_CLOSE:
-                    Close();
-                    return;
-                case WIDX_TAB_1:
-                case WIDX_TAB_2:
-                case WIDX_TAB_3:
-                case WIDX_TAB_4:
-                case WIDX_TAB_5:
-                case WIDX_TAB_6:
-                case WIDX_TAB_7:
-                    SetPage(widx - WIDX_TAB_1);
-                    return;
-            }
-
-            switch (page)
-            {
-                case WINDOW_GUEST_OVERVIEW:
-                    OnMouseUpOverview(widx);
-                    break;
-            }
-        }
-        void OnMouseDown(WidgetIndex widx) override
-        {
-            if (page == WINDOW_GUEST_OVERVIEW)
-            {
-                OnMouseDownOverview(widx);
-            }
-        }
-        void OnDropdown(WidgetIndex widgetIndex, int32_t selectedIndex) override
-        {
-            if (page == WINDOW_GUEST_OVERVIEW)
-            {
-                OnDropdownOverview(widgetIndex, selectedIndex);
-            }
-        }
-        void OnResize() override
-        {
-            switch (page)
-            {
-                case WINDOW_GUEST_OVERVIEW:
-                    OnResizeOverview();
-                    break;
-                case WINDOW_GUEST_STATS:
-                case WINDOW_GUEST_RIDES:
-                case WINDOW_GUEST_FINANCE:
-                case WINDOW_GUEST_THOUGHTS:
-                case WINDOW_GUEST_INVENTORY:
-                case WINDOW_GUEST_DEBUG:
-                    OnResizeCommon();
-                    break;
-            }
-        }
-        void OnUpdate() override
-        {
-            switch (page)
-            {
-                case WINDOW_GUEST_OVERVIEW:
-                    OnUpdateOverview();
-                    break;
-                case WINDOW_GUEST_STATS:
-                    OnUpdateStats();
-                    break;
-                case WINDOW_GUEST_RIDES:
-                    OnUpdateRides();
-                    break;
-                case WINDOW_GUEST_FINANCE:
-                    OnUpdateFinance();
-                    break;
-                case WINDOW_GUEST_THOUGHTS:
-                    OnUpdateThoughts();
-                    break;
-                case WINDOW_GUEST_INVENTORY:
-                    OnUpdateInventory();
-                    break;
-                case WINDOW_GUEST_DEBUG:
-                    OnUpdateDebug();
-                    break;
-            }
-        }
-        void OnToolUpdate(WidgetIndex widgetIndex, const ScreenCoordsXY& screenCoords) override
-        {
-            if (page == WINDOW_GUEST_OVERVIEW)
-            {
-                OnToolUpdateOverview(widgetIndex, screenCoords);
-            }
-        }
-        void OnToolDown(WidgetIndex widgetIndex, const ScreenCoordsXY& screenCoords) override
-        {
-            if (page == WINDOW_GUEST_OVERVIEW)
-            {
-                OnToolDownOverview(widgetIndex, screenCoords);
-            }
-        }
-        void OnToolAbort(WidgetIndex widgetIndex) override
-        {
-            if (page == WINDOW_GUEST_OVERVIEW)
-            {
-                OnToolAbortOverview(widgetIndex);
-            }
-        }
-        void OnTextInput(WidgetIndex widgetIndex, std::string_view text) override
-        {
-            if (page == WINDOW_GUEST_OVERVIEW)
-            {
-                OnTextInputOverview(widgetIndex, text);
-            }
-        }
-        void OnViewportRotate() override
-        {
-            if (page == WINDOW_GUEST_OVERVIEW)
-            {
-                OnViewportRotateOverview();
-            }
-        }
-        void OnDraw(DrawPixelInfo& dpi) override
-        {
-            switch (page)
-            {
-                case WINDOW_GUEST_OVERVIEW:
-                    OnDrawOverview(dpi);
-                    break;
-                case WINDOW_GUEST_STATS:
-                    OnDrawStats(dpi);
-                    break;
-                case WINDOW_GUEST_RIDES:
-                    OnDrawRides(dpi);
-                    break;
-                case WINDOW_GUEST_FINANCE:
-                    OnDrawFinance(dpi);
-                    break;
-                case WINDOW_GUEST_THOUGHTS:
-                    OnDrawThoughts(dpi);
-                    break;
-                case WINDOW_GUEST_INVENTORY:
-                    OnDrawInventory(dpi);
-                    break;
-                case WINDOW_GUEST_DEBUG:
-                    OnDrawDebug(dpi);
-                    break;
-            }
-        }
-        void OnPrepareDraw() override
-        {
-            OnPrepareDrawCommon();
-            switch (page)
-            {
-                case WINDOW_GUEST_OVERVIEW:
-                    OnPrepareDrawOverview();
-                    break;
-                case WINDOW_GUEST_RIDES:
-                    OnPrepareDrawRides();
-                    break;
-            }
-        }
-        ScreenSize OnScrollGetSize(int32_t scrollIndex) override
-        {
-            if (page == WINDOW_GUEST_RIDES)
-            {
-                return OnScrollGetSizeRides(scrollIndex);
-            }
-            return {};
-        }
-
-        void OnScrollMouseOver(int32_t scrollIndex, const ScreenCoordsXY& screenCoords) override
-        {
-            if (page == WINDOW_GUEST_RIDES)
-            {
-                OnScrollMouseOverRides(scrollIndex, screenCoords);
-            }
-        }
-        void OnScrollMouseDown(int32_t scrollIndex, const ScreenCoordsXY& screenCoords) override
-        {
-            if (page == WINDOW_GUEST_RIDES)
-            {
-                OnScrollMouseDownRides(scrollIndex, screenCoords);
-            }
-        }
-        void OnScrollDraw(int32_t scrollIndex, DrawPixelInfo& dpi) override
-        {
-            if (page == WINDOW_GUEST_RIDES)
-            {
-                OnScrollDrawRides(scrollIndex, dpi);
-            }
-        }
-
-    private:
-        Guest* GetGuest()
-        {
-            auto guest = GetEntity<Guest>(EntityId::FromUnderlying(number));
-            if (guest == nullptr)
-            {
+            case WIDX_CLOSE:
                 Close();
-                return nullptr;
-            }
-            return guest;
-        }
-
-        void OnResizeCommon()
-        {
-            // Get page specific min and max size
-            int32_t minWidth = _guestWindowPageSizes[page][0].width;
-            int32_t minHeight = _guestWindowPageSizes[page][0].height;
-            int32_t maxWidth = _guestWindowPageSizes[page][1].width;
-            int32_t maxHeight = _guestWindowPageSizes[page][1].height;
-
-            // Ensure min size is large enough for all tabs to fit
-            for (int32_t i = WIDX_TAB_1; i <= WIDX_TAB_7; i++)
-            {
-                if (!WidgetIsDisabled(*this, i))
-                {
-                    minWidth = std::max(minWidth, widgets[i].right + 3);
-                }
-            }
-            maxWidth = std::max(minWidth, maxWidth);
-
-            WindowSetResize(*this, minWidth, minHeight, maxWidth, maxHeight);
-        }
-
-        void OnPrepareDrawCommon()
-        {
-            if (_guestWindowPageWidgets[page] != widgets)
-            {
-                widgets = _guestWindowPageWidgets[page];
-                InitScrollWidgets();
-            }
-
-            pressed_widgets |= 1uLL << (page + WIDX_TAB_1);
-
-            const auto peep = GetGuest();
-            if (peep == nullptr)
-            {
                 return;
-            }
-            auto ft = Formatter::Common();
-            peep->FormatNameTo(ft);
-
-            ResizeFrameWithPage();
-
-            WindowAlignTabs(this, WIDX_TAB_1, WIDX_TAB_7);
-        }
-
-        void DisableWidgets()
-        {
-            const auto peep = GetGuest();
-            if (peep == nullptr)
-            {
+            case WIDX_TAB_1:
+            case WIDX_TAB_2:
+            case WIDX_TAB_3:
+            case WIDX_TAB_4:
+            case WIDX_TAB_5:
+            case WIDX_TAB_6:
+            case WIDX_TAB_7:
+                SetPage(widx - WIDX_TAB_1);
                 return;
-            }
-            uint64_t newDisabledWidgets = 0;
-
-            if (peep->CanBePickedUp())
-            {
-                if (WidgetIsDisabled(*this, WIDX_PICKUP))
-                    Invalidate();
-            }
-            else
-            {
-                newDisabledWidgets = (1uLL << WIDX_PICKUP);
-                if (!WidgetIsDisabled(*this, WIDX_PICKUP))
-                    Invalidate();
-            }
-            if (GetGameState().Park.Flags & PARK_FLAGS_NO_MONEY)
-            {
-                newDisabledWidgets |= (1uLL << WIDX_TAB_4); // Disable finance tab if no money
-            }
-            if (!Config::Get().general.DebuggingTools)
-            {
-                newDisabledWidgets |= (1uLL << WIDX_TAB_7); // Disable debug tab when debug tools not turned on
-            }
-            disabled_widgets = newDisabledWidgets;
         }
 
-        void SetPage(int32_t newPage)
+        switch (page)
         {
+            case WINDOW_GUEST_OVERVIEW:
+                OnMouseUpOverview(widx);
+                break;
+        }
+    }
+    void OnMouseDown(WidgetIndex widx) override
+    {
+        if (page == WINDOW_GUEST_OVERVIEW)
+        {
+            OnMouseDownOverview(widx);
+        }
+    }
+    void OnDropdown(WidgetIndex widgetIndex, int32_t selectedIndex) override
+    {
+        if (page == WINDOW_GUEST_OVERVIEW)
+        {
+            OnDropdownOverview(widgetIndex, selectedIndex);
+        }
+    }
+    void OnResize() override
+    {
+        switch (page)
+        {
+            case WINDOW_GUEST_OVERVIEW:
+                OnResizeOverview();
+                break;
+            case WINDOW_GUEST_STATS:
+            case WINDOW_GUEST_RIDES:
+            case WINDOW_GUEST_FINANCE:
+            case WINDOW_GUEST_THOUGHTS:
+            case WINDOW_GUEST_INVENTORY:
+            case WINDOW_GUEST_DEBUG:
+                OnResizeCommon();
+                break;
+        }
+    }
+    void OnUpdate() override
+    {
+        switch (page)
+        {
+            case WINDOW_GUEST_OVERVIEW:
+                OnUpdateOverview();
+                break;
+            case WINDOW_GUEST_STATS:
+                OnUpdateStats();
+                break;
+            case WINDOW_GUEST_RIDES:
+                OnUpdateRides();
+                break;
+            case WINDOW_GUEST_FINANCE:
+                OnUpdateFinance();
+                break;
+            case WINDOW_GUEST_THOUGHTS:
+                OnUpdateThoughts();
+                break;
+            case WINDOW_GUEST_INVENTORY:
+                OnUpdateInventory();
+                break;
+            case WINDOW_GUEST_DEBUG:
+                OnUpdateDebug();
+                break;
+        }
+    }
+    void OnToolUpdate(WidgetIndex widgetIndex, const ScreenCoordsXY& screenCoords) override
+    {
+        if (page == WINDOW_GUEST_OVERVIEW)
+        {
+            OnToolUpdateOverview(widgetIndex, screenCoords);
+        }
+    }
+    void OnToolDown(WidgetIndex widgetIndex, const ScreenCoordsXY& screenCoords) override
+    {
+        if (page == WINDOW_GUEST_OVERVIEW)
+        {
+            OnToolDownOverview(widgetIndex, screenCoords);
+        }
+    }
+    void OnToolAbort(WidgetIndex widgetIndex) override
+    {
+        if (page == WINDOW_GUEST_OVERVIEW)
+        {
+            OnToolAbortOverview(widgetIndex);
+        }
+    }
+    void OnTextInput(WidgetIndex widgetIndex, std::string_view text) override
+    {
+        if (page == WINDOW_GUEST_OVERVIEW)
+        {
+            OnTextInputOverview(widgetIndex, text);
+        }
+    }
+    void OnViewportRotate() override
+    {
+        if (page == WINDOW_GUEST_OVERVIEW)
+        {
+            OnViewportRotateOverview();
+        }
+    }
+    void OnDraw(DrawPixelInfo& dpi) override
+    {
+        switch (page)
+        {
+            case WINDOW_GUEST_OVERVIEW:
+                OnDrawOverview(dpi);
+                break;
+            case WINDOW_GUEST_STATS:
+                OnDrawStats(dpi);
+                break;
+            case WINDOW_GUEST_RIDES:
+                OnDrawRides(dpi);
+                break;
+            case WINDOW_GUEST_FINANCE:
+                OnDrawFinance(dpi);
+                break;
+            case WINDOW_GUEST_THOUGHTS:
+                OnDrawThoughts(dpi);
+                break;
+            case WINDOW_GUEST_INVENTORY:
+                OnDrawInventory(dpi);
+                break;
+            case WINDOW_GUEST_DEBUG:
+                OnDrawDebug(dpi);
+                break;
+        }
+    }
+    void OnPrepareDraw() override
+    {
+        OnPrepareDrawCommon();
+        switch (page)
+        {
+            case WINDOW_GUEST_OVERVIEW:
+                OnPrepareDrawOverview();
+                break;
+            case WINDOW_GUEST_RIDES:
+                OnPrepareDrawRides();
+                break;
+        }
+    }
+    ScreenSize OnScrollGetSize(int32_t scrollIndex) override
+    {
+        if (page == WINDOW_GUEST_RIDES)
+        {
+            return OnScrollGetSizeRides(scrollIndex);
+        }
+        return {};
+    }
+
+    void OnScrollMouseOver(int32_t scrollIndex, const ScreenCoordsXY& screenCoords) override
+    {
+        if (page == WINDOW_GUEST_RIDES)
+        {
+            OnScrollMouseOverRides(scrollIndex, screenCoords);
+        }
+    }
+    void OnScrollMouseDown(int32_t scrollIndex, const ScreenCoordsXY& screenCoords) override
+    {
+        if (page == WINDOW_GUEST_RIDES)
+        {
+            OnScrollMouseDownRides(scrollIndex, screenCoords);
+        }
+    }
+    void OnScrollDraw(int32_t scrollIndex, DrawPixelInfo& dpi) override
+    {
+        if (page == WINDOW_GUEST_RIDES)
+        {
+            OnScrollDrawRides(scrollIndex, dpi);
+        }
+    }
+
+private:
+    Guest* GetGuest()
+    {
+        auto guest = GetEntity<Guest>(EntityId::FromUnderlying(number));
+        if (guest == nullptr)
+        {
+            Close();
+            return nullptr;
+        }
+        return guest;
+    }
+
+    void OnResizeCommon()
+    {
+        // Get page specific min and max size
+        auto titleBarHeight = widgets[WIDX_TITLE].height();
+        int32_t minWidth = _guestWindowPageSizes[page][0].width + titleBarHeight;
+        int32_t minHeight = _guestWindowPageSizes[page][0].height + titleBarHeight;
+        int32_t maxWidth = _guestWindowPageSizes[page][1].width + titleBarHeight;
+        int32_t maxHeight = _guestWindowPageSizes[page][1].height + titleBarHeight;
+
+        // Ensure min size is large enough for all tabs to fit
+        for (int32_t i = WIDX_TAB_1; i <= WIDX_TAB_7; i++)
+        {
+            if (!WidgetIsDisabled(*this, i))
+            {
+                minWidth = std::max(minWidth, widgets[i].right + 3);
+            }
+        }
+        maxWidth = std::max(minWidth, maxWidth);
+
+        WindowSetResize(*this, minWidth, minHeight, maxWidth, maxHeight);
+    }
+
+    void OnPrepareDrawCommon()
+    {
+        if (_guestWindowPageWidgets[page] != widgets)
+        {
+            widgets = _guestWindowPageWidgets[page];
+            InitScrollWidgets();
+        }
+
+        pressed_widgets |= 1uLL << (page + WIDX_TAB_1);
+
+        const auto peep = GetGuest();
+        if (peep == nullptr)
+        {
+            return;
+        }
+        auto ft = Formatter::Common();
+        peep->FormatNameTo(ft);
+
+        ResizeFrameWithPage();
+
+        WindowAlignTabs(this, WIDX_TAB_1, WIDX_TAB_7);
+    }
+
+    void DisableWidgets()
+    {
+        const auto peep = GetGuest();
+        if (peep == nullptr)
+        {
+            return;
+        }
+        uint64_t newDisabledWidgets = 0;
+
+        if (peep->CanBePickedUp())
+        {
+            if (WidgetIsDisabled(*this, WIDX_PICKUP))
+                Invalidate();
+        }
+        else
+        {
+            newDisabledWidgets = (1uLL << WIDX_PICKUP);
+            if (!WidgetIsDisabled(*this, WIDX_PICKUP))
+                Invalidate();
+        }
+        if (GetGameState().Park.Flags & PARK_FLAGS_NO_MONEY)
+        {
+            newDisabledWidgets |= (1uLL << WIDX_TAB_4); // Disable finance tab if no money
+        }
+        if (!Config::Get().general.DebuggingTools)
+        {
+            newDisabledWidgets |= (1uLL << WIDX_TAB_7); // Disable debug tab when debug tools not turned on
+        }
+        disabled_widgets = newDisabledWidgets;
+    }
+
+    void SetPage(int32_t newPage)
+    {
             if (isToolActive(classification, number))
                 ToolCancel();
 
-            int32_t listen = 0;
-            if (newPage == WINDOW_GUEST_OVERVIEW && page == WINDOW_GUEST_OVERVIEW && viewport != nullptr)
-            {
-                if (!(viewport->flags & VIEWPORT_FLAG_SOUND_ON))
-                    listen = 1;
-            }
-
-            page = newPage;
-            frame_no = 0;
-            _riddenRides.clear();
-            selected_list_item = -1;
-
-            RemoveViewport();
-
-            hold_down_widgets = 0;
-            pressed_widgets = 0;
-            widgets = _guestWindowPageWidgets[page];
-            DisableWidgets();
-            Invalidate();
-            OnResize();
-            OnPrepareDraw();
-            InitScrollWidgets();
-            Invalidate();
-
-            if (listen && viewport != nullptr)
-                viewport->flags |= VIEWPORT_FLAG_SOUND_ON;
+        int32_t listen = 0;
+        if (newPage == WINDOW_GUEST_OVERVIEW && page == WINDOW_GUEST_OVERVIEW && viewport != nullptr)
+        {
+            if (!(viewport->flags & VIEWPORT_FLAG_SOUND_ON))
+                listen = 1;
         }
+
+        page = newPage;
+        frame_no = 0;
+        _riddenRides.clear();
+        selected_list_item = -1;
+
+        RemoveViewport();
+
+        hold_down_widgets = 0;
+        pressed_widgets = 0;
+        widgets = _guestWindowPageWidgets[page];
+        DisableWidgets();
+        Invalidate();
+        OnResize();
+        OnPrepareDraw();
+        InitScrollWidgets();
+        Invalidate();
+
+        if (listen && viewport != nullptr)
+            viewport->flags |= VIEWPORT_FLAG_SOUND_ON;
+    }
 
 #pragma region Overview
 
@@ -605,8 +607,10 @@ namespace OpenRCT2::Ui::Windows
 
             if (viewport != nullptr)
             {
-                auto reqViewportWidth = width - 30;
-                auto reqViewportHeight = height - 72;
+                auto widget = widgets[WIDX_VIEWPORT];
+                auto reqViewportWidth = widget.width() - 1;
+                auto reqViewportHeight = widget.height() - 1;
+                viewport->pos = windowPos + ScreenCoordsXY{ widget.left + 1, widget.top + 1 };
                 if (viewport->width != reqViewportWidth || viewport->height != reqViewportHeight)
                 {
                     viewport->width = reqViewportWidth;
