@@ -637,17 +637,29 @@ namespace OpenRCT2::String
         auto srcW = ToWideChar(src);
 
         // Measure how long the destination needs to be
+#    if _WIN32_WINNT >= 0x600
         auto requiredSize = LCMapStringEx(
             LOCALE_NAME_USER_DEFAULT, LCMAP_UPPERCASE | LCMAP_LINGUISTIC_CASING, srcW.c_str(), static_cast<int>(srcW.length()),
             nullptr, 0, nullptr, nullptr, 0);
+#    else
+        auto requiredSize = LCMapStringW(
+            LOCALE_USER_DEFAULT, LCMAP_UPPERCASE | LCMAP_LINGUISTIC_CASING, srcW.c_str(), static_cast<int>(srcW.length()),
+            nullptr, 0);
+#    endif
 
         auto dstW = std::wstring();
         dstW.resize(requiredSize);
 
         // Transform the string
+#    if _WIN32_WINNT >= 0x600
         auto result = LCMapStringEx(
             LOCALE_NAME_USER_DEFAULT, LCMAP_UPPERCASE | LCMAP_LINGUISTIC_CASING, srcW.c_str(), static_cast<int>(srcW.length()),
             dstW.data(), static_cast<int>(dstW.length()), nullptr, nullptr, 0);
+#    else
+        auto requiredSize = LCMapStringW(
+            LOCALE_USER_DEFAULT, LCMAP_UPPERCASE | LCMAP_LINGUISTIC_CASING, srcW.c_str(), static_cast<int>(srcW.length()),
+            dstW.data(), static_cast<int>(dstW.length()));
+#    endif
         if (result == 0)
         {
             // Check the error

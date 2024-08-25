@@ -169,7 +169,13 @@ FileWatcher::FileWatcher(u8string_view directoryPath)
 FileWatcher::~FileWatcher()
 {
 #ifdef _WIN32
+#    if _WIN32_WINNT >= 0x600
     CancelIoEx(_directoryHandle, nullptr);
+#    else
+    // TODO: CancelIo does not work on handles created on a different thread!
+    // Not sure if that functionality is needed.
+    CancelIo(_directoryHandle)
+#    endif
     _watchThread.join();
     CloseHandle(_directoryHandle);
 #elif defined(__linux__)

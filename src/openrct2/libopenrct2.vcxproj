@@ -990,6 +990,7 @@
     <ClCompile Include="platform\Platform.Android.cpp" />
     <ClCompile Include="platform\Platform.Common.cpp" />
     <ClCompile Include="platform\Platform.Linux.cpp" />
+    <ClCompile Include="platform\Platform.NT6.cpp" />
     <ClCompile Include="platform\Platform.Posix.cpp" />
     <ClCompile Include="platform\Platform.Win32.cpp" />
     <ClCompile Include="profiling\Profiling.cpp" />

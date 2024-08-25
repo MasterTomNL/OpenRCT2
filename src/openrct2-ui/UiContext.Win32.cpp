@@ -125,10 +125,50 @@ namespace OpenRCT2::Ui
             ShellExecuteW(NULL, L"open", urlW.c_str(), NULL, NULL, SW_SHOWNORMAL);
         }
 
+#    if (_WIN32_WINNT < 0x600)
         std::string ShowFileDialogInternal(SDL_Window* window, const FileDialogDesc& desc, bool isFolder)
         {
             std::string resultFilename;
+            WCHAR path[MAX_PATH] = {};
+            if (isFolder)
+            {
+                BROWSEINFOW bi = {};
+                std::wstring wtitle = String::ToWideChar(desc.Title);
+                bi.hwndOwner = nullptr;
+                bi.pidlRoot = nullptr;
+                bi.pszDisplayName = path;
+                bi.lpszTitle = wtitle.c_str();
+                bi.ulFlags = BIF_USENEWUI;
+                bi.lpfn = nullptr;
+                bi.lParam = 0;
+                bi.iImage = 0;
 
+                PIDLIST_ABSOLUTE list = SHBrowseForFolderW(&bi);
+                if (list != NULL)
+                {
+                    SHGetPathFromIDListW(list, path);
+                    resultFilename = String::ToUtf8(path);
+                    MessageBoxW(NULL, path, NULL, MB_OK);
+                }
+            }
+            else
+            {
+                OPENFILENAMEW ofn = {};
+                ofn.lStructSize = sizeof(ofn);
+                ofn.lpstrFile = path;
+                ofn.nMaxFile = MAX_PATH;
+                if (desc.Type == FileDialogType::Save)
+                    GetSaveFileNameW(&ofn);
+                else
+                    GetOpenFileNameW(&ofn);
+                resultFilename = String::ToUtf8(ofn.lpstrFile);
+            }
+            return resultFilename;
+        }
+#    else
+        std::string ShowFileDialogInternal(SDL_Window* window, const FileDialogDesc& desc, bool isFolder)
+        {
+            std::string resultFilename;
             CCoInitialize coInitialize(COINIT_APARTMENTTHREADED);
             if (coInitialize)
             {
@@ -195,6 +235,7 @@ namespace OpenRCT2::Ui
             }
             return resultFilename;
         }
+#    endif
 
         std::string ShowFileDialog(SDL_Window* window, const FileDialogDesc& desc) override
         {

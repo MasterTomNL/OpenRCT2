@@ -7,7 +7,7 @@
  * OpenRCT2 is licensed under the GNU General Public License version 3.
  *****************************************************************************/
 
-#if !defined(DISABLE_HTTP) && !defined(_WIN32) && !defined(__ANDROID__)
+#if !defined(DISABLE_HTTP) && (!defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0600)) && !defined(__ANDROID__)
 
 #    include "Http.h"
 
@@ -112,6 +112,10 @@ namespace OpenRCT2::Http
         if (req.method == Method::PUT)
             curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
+#    ifdef _WIN32
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        curl_easy_setopt(curl, CURLOPT_CAINFO, "./cacert.pem");
+#    endif
         curl_easy_setopt(curl, CURLOPT_URL, req.url.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteData);
