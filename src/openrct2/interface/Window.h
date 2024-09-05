@@ -140,6 +140,20 @@ struct Widget
         moveDown(coords.y - top);
     }
 
+    void moveToX(int16_t x)
+    {
+        auto currentWidth = width();
+        left = x;
+        right = x + currentWidth;
+    }
+
+    void moveToY(int16_t y)
+    {
+        auto currentHeight = height();
+        top = y;
+        bottom = y + currentHeight;
+    }
+
     bool IsVisible() const
     {
         return !(flags & OpenRCT2::WIDGET_FLAGS::IS_HIDDEN);
