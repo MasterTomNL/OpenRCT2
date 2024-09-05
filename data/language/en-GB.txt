@@ -3740,6 +3740,10 @@ STR_6667    :Fauna
 STR_6668    :Staff cheats
 STR_6669    :Show staff cheats
 STR_6670    :Guest behaviour
+STR_6671    :Make invisible
+STR_6672    :Makes the whole ride invisible
+STR_6673    :Make visible
+STR_6674    :Makes the whole ride visible
 
 #############
 # Scenarios #
