@@ -436,6 +436,7 @@ enum class RtdFlag : uint8_t
     isMaze = 58,
     isSpiralSlide = 59,
     allowReversedTrains = 60,
+    isDummyType = 61,
 };
 
 // Set on ride types that have a main colour, additional colour and support colour.
@@ -598,7 +599,7 @@ constexpr RideTypeDescriptor DummyRTD =
     .StartTrackPiece = OpenRCT2::TrackElemType::EndStation,
     .TrackPaintFunctions = {},
     .InvertedTrackPaintFunctions = {},
-    .Flags = 0,
+    .Flags = EnumToFlag(RtdFlag::isDummyType),
     .RideModes = EnumsToFlags(RideMode::ContinuousCircuit),
     .DefaultMode = RideMode::ContinuousCircuit,
     .OperatingSettings = {},
