@@ -385,7 +385,9 @@ private:
     /**
      * @return true If UpdateTrackMotion() must return after calling this function.
      */
-    bool UpdateTrackMotionUpdateCar(Vehicle* car, const CarEntry& carEntry, const Ride& curRide, const RideObjectEntry& rideEntry, int32_t* outStation, EntityId& spriteId);
+    bool UpdateTrackMotionUpdateCar(
+        Vehicle* car, const CarEntry& carEntry, const Ride& curRide, const RideObjectEntry& rideEntry, int32_t* outStation,
+        EntityId& spriteId);
 
     enum class UpdateMiniGolfFlagsStatus
     {
