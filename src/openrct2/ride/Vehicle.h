@@ -386,6 +386,14 @@ private:
      * @return true If UpdateTrackMotion() must return after calling this function.
      */
     bool UpdateTrackMotionUpdateCar(Vehicle* car, const CarEntry& carEntry, const Ride& curRide, const RideObjectEntry& rideEntry, int32_t* outStation, EntityId& spriteId);
+
+    enum class UpdateMiniGolfFlagsStatus
+    {
+        carryOn,
+        restart,
+        stop,
+    };
+    UpdateMiniGolfFlagsStatus UpdateTrackMotionMiniGolfFlagsStatus(const Ride& curRide);
 };
 static_assert(sizeof(Vehicle) <= 512);
 
