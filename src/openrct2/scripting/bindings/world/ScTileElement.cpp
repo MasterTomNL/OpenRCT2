@@ -417,7 +417,7 @@ namespace OpenRCT2::Scripting
         auto* el = _element->AsTrack();
         if (el != nullptr)
         {
-            duk_push_int(ctx, el->GetTrackType());
+            duk_push_int(ctx, EnumValue(el->GetTrackType()));
         }
         else
         {
@@ -437,7 +437,7 @@ namespace OpenRCT2::Scripting
             return;
         }
 
-        el->SetTrackType(value);
+        el->SetTrackType(static_cast<TrackElemType>(value));
         Invalidate();
     }
 
