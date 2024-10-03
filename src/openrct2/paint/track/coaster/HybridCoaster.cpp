@@ -14364,7 +14364,7 @@ namespace OpenRCT2::HybridRC
         PaintUtilSetGeneralSupportHeight(session, height + 56);
     }
 
-    TRACK_PAINT_FUNCTION GetTrackPaintFunction((OpenRCT2::TrackElemType trackType)
+    TRACK_PAINT_FUNCTION GetTrackPaintFunction(OpenRCT2::TrackElemType trackType)
     {
         switch (trackType)
         {
